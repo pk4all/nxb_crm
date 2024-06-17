@@ -5,10 +5,10 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Adolaa APIs')
+    .setDescription('The Adolaa all APIs')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('Adolaa')
     .build();
     const options: SwaggerDocumentOptions =  {
       operationIdFactory: (
@@ -17,7 +17,7 @@ async function bootstrap() {
       ) => methodKey
     };
   const document = SwaggerModule.createDocument(app, config,options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('adolaa-api', app, document);
   await app.listen(3000);
 }
 bootstrap();
