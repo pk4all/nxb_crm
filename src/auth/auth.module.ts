@@ -6,8 +6,11 @@ import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../schemas/user.schema';
 import * as bcrypt from 'bcrypt';
-import { AuthGuard } from './auth.guard';
+// import { JwtAuthGuard } from './auth.guard';
 import { jwtConstants } from './constants';
+import { PassportModule } from '@nestjs/passport';
+import { LocalStrategy } from './local.strategy';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [MongooseModule.forFeatureAsync([
@@ -28,10 +31,11 @@ import { jwtConstants } from './constants';
     }]
   ),
   JwtModule.register({
-    global: true,
+    //global: true,
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '60s' },
+    signOptions: { expiresIn: '6000s' },
   }),
+  PassportModule
 ],
   controllers: [AuthController],
   providers: [
@@ -39,10 +43,13 @@ import { jwtConstants } from './constants';
     // {
     //   provide: APP_GUARD,
     //   useClass: AuthGuard,
-    // }
+    // },
+    LocalStrategy,
+    JwtStrategy
   ],
   exports: [AuthService],
 })
+
 export class AuthModule {}
 
 

@@ -9,6 +9,14 @@ async function bootstrap() {
     .setDescription('The Adolaa all APIs')
     .setVersion('1.0')
     .addTag('Adolaa')
+    .addBearerAuth(
+      { 
+        type: 'http', 
+        scheme: 'bearer', 
+        bearerFormat: 'JWT' 
+      },
+      'access-token',
+    )
     .build();
     const options: SwaggerDocumentOptions =  {
       operationIdFactory: (

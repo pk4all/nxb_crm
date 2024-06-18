@@ -42,4 +42,19 @@ export class AuthService {
           access_token: await this.jwtService.signAsync(payload),
         };
       }
+
+      async validateUser(username: string, pass: string){
+        const user = await this.findOne(username);
+        const isMatch = await bcrypt.compare(pass, user?.password);
+        if (!isMatch) {
+          throw new BadRequestException('User name or password is not valid', { cause: new Error(), description: 'Invalid Credentials' });
+        }
+        const { password, ...result } = user;
+        return result;
+        // const payload = { email: user.email, sub: user.name };
+        // return {
+        //   access_token: await this.jwtService.signAsync(payload),
+        // };
+      }
+      
 }
