@@ -1,5 +1,3 @@
-import { Document } from 'mongoose';
-import { IsEmail, IsString, IsNotEmpty,IsNumber } from 'class-validator';
 
 export class UserDto {
     readonly name: string;

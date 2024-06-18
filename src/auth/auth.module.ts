@@ -33,7 +33,7 @@ import { JwtStrategy } from './jwt.strategy';
   JwtModule.register({
     //global: true,
     secret: jwtConstants.secret,
-    signOptions: { expiresIn: '6000s' },
+    signOptions: { expiresIn: '600000s' },
   }),
   PassportModule
 ],

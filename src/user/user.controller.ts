@@ -1,7 +1,8 @@
-import { Controller,Post, Body} from '@nestjs/common';
+import { Controller,Post, Body,Get} from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { User } from '../schemas/user.schema';
 import { UserService } from './user.service';
+import { createResponse } from '../common/utils/response.util';
 @Controller('api/user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
@@ -10,16 +11,15 @@ export class UserController {
     async registerUser(@Body() createUserDto:CreateUserDto){
         try {
             const u = await this.userService.create(createUserDto);
-            return {
-                status:'success',
-                data:u,
-                message:'User successfuly created'
-            };
+            return createResponse(200,u,'User successfuly created ','success');
         } catch (error) {
-            return {
-                status:'error',
-                message:error.message
-            };
+            return createResponse(error.statusCode,'',error.message,'error');
         }
     }
+
+    @Get('/ads-list')
+    async userAdsList(){
+
+    }
+
 }
