@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  private tokenBlacklist: Set<string> = new Set();
+    private tokenBlacklist: Set<string> = new Set();
     constructor(
       @InjectModel(User.name) private userModel: Model<User>,
       private jwtService: JwtService
@@ -42,7 +42,7 @@ export class AuthService {
         if (!isMatch) {
           throw new BadRequestException('User name or password is not valid', { cause: new Error(), description: 'Invalid Credentials' });
         }
-        const payload = {id:user?._id, email: user?.email, name: user?.name };
+        const payload = {id:user?.id, email: user?.email, name: user?.name };
         return {
           access_token: await this.jwtService.signAsync(payload),
         };

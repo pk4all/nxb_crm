@@ -8,7 +8,7 @@ export class AppController {
   @Get()
   @Render('index')
   getHello(){
-    return {message:this.appService.getHello(),layout: 'login'};
+    return {message:this.appService.getHello()};
   }
 
 }
