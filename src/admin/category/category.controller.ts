@@ -5,10 +5,11 @@ import { SessionGuard } from '../../gaurds/session.guard';
 import { Response, Request } from 'express';
 
 @Controller('admin')
-//@UseGuards(SessionGuard)
+@UseGuards(SessionGuard)
 export class CategoryController {
 
     constructor(private readonly categoryService: CategoryService) {}
+
     @Get('/categories')
     @Render('admin/category/categories_list')
     async categories(@Req() req: Request, @Res() res: Response){
@@ -26,4 +27,26 @@ export class CategoryController {
     async saveCategory(@Req() req: Request, @Res() res: Response){
        // return {layout:'admin'}
     }
+
+    @Get('/listing-types')
+    @Render('admin/category/listing_type_list')
+    async listingTypes(@Req() req: Request, @Res() res: Response){
+
+        return {layout:'admin'}
+    }
+
+    @Get('/listing-type/add')
+    @Render('admin/category/add_listing_type')
+    async addListingType(@Req() req: Request, @Res() res: Response){
+
+        return {layout:'admin'}
+    }
+
+    @Post('/listing-type/save')
+    async saveListingType(@Req() req: Request, @Res() res: Response){
+       // return {layout:'admin'}
+    }
+
+
+
 }
