@@ -1,0 +1,24 @@
+{{!-- {{#if pagination.count }} --}}
+      <div class="dataTables_paginate paging_simple_numbers">
+        <ul class="pagination">
+           {{#if (gt pagination.page 1)}}
+            <li class="page-item">
+              <a class="page-link" href="?limit={{pagination.limit}}&page={{pagination.pageMinusOne}}" >Prev</a>
+            </li>
+          {{/if}}
+          
+         {{#each pagination.pages as |pageNo|}}
+         <li class="page-item {{#if (eq ../pagination.page pageNo)}}active{{/if}}">
+          <a class="page-link {{#if (eq ../pagination.page pageNo)}}active{{/if}}" href="?limit={{../pagination.limit}}&page={{pageNo}}" >{{pageNo}}</a>
+        </li>
+        {{/each}}
+
+         {{#if (lt pagination.page pagination.totalPages)}}
+            <li class="page-item">
+              <a class="page-link" href="?limit={{pagination.limit}}&page={{pagination.pagePlusOne}}">Next</a>
+            </li>
+        {{/if}}
+        </ul>
+      </div>
+  {{!-- {{/if}} --}}
+    

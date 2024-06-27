@@ -19,8 +19,37 @@ async function bootstrap() {
       defaultLayout: 'main', // Default layout file
       layoutsDir: join(__dirname, '..', 'views/layouts'),
       partialsDir: join(__dirname, '..', 'views/partials'),
+      helpers: {
+        incrementedIndex: function (index: number) {
+          return index + 1;
+        },
+        json: function (context: any) {
+          return JSON.stringify(context);
+        },
+        jsonParse: function (context: any) {
+          var l = JSON.stringify(context);
+          return JSON.parse(l);
+        },
+        gt: function (a: number, b: number) {
+          return a > b;
+        },
+        lt: function (a: number, b: number) {
+          return a < b;
+        },
+        eq: function (a: any, b: any) {
+          ///console.log(a,b);
+          return a == b;
+        }
+      }
     }),
   );
+  // hbs.registerHelper('debug', function (context) {
+  //   return JSON.stringify(context);
+  // });
+  // hbs.registerHelper('incrementedIndex', function (index) {
+  //   return index + 1;
+  // });
+  app.setViewEngine('hbs');
   const config = new DocumentBuilder()
     .setTitle('Adolaa APIs')
     .setDescription('The Adolaa all APIs')
@@ -43,9 +72,9 @@ async function bootstrap() {
     };
   const document = SwaggerModule.createDocument(app, config,options);
   SwaggerModule.setup('adolaa-api', app, document);
+  app.setViewEngine('hbs');
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  app.setViewEngine('hbs');
   app.use(
     session({
       secret: 'f1d2d2f924e986ac86fdf7b36c94bcdf32beec15a0a48641b8edc446620aeb8f',

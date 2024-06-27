@@ -1,8 +1,24 @@
 import { Module } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryController } from './category.controller';
-
+import { MongooseModule } from '@nestjs/mongoose';
+import { ListingType,ListingTypeSchema } from 'src/schemas/listingtype.schema';
 @Module({
+  imports:[MongooseModule.forFeatureAsync([{
+    name:ListingType.name,
+    useFactory: () => {
+    const schema = ListingTypeSchema;
+    schema.pre('save', async function () {
+      if (this.name && this.isModified('name')) {
+        this.slug = this.name.toLowerCase()
+        .trim()
+        .replace(/[\s\W-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      }
+      
+    });
+    return schema;
+  }}])],
   providers: [CategoryService],
   controllers: [CategoryController]
 })

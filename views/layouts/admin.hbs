@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/adolaa-thumb-32x32-ico.png">
   <title>{{title}}</title>
   <link href="/admin/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
   <link href="/admin/css/icons.css" rel="stylesheet" type="text/css" />
   <link href="/admin/css/style.css" rel="stylesheet" type="text/css" />
-   <script src="/admin/js/modernizr.min.js"></script>
+  <script src="/admin/js/modernizr.min.js"></script>
+  {{!-- <script src="/admin/js/jquery.min.js"></script> --}}
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/admin/js/popper.min.js"></script><!-- Popper for Bootstrap -->
+  <script src="/admin/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 </head>
 <body class="fixed-left"> 
    <div id="wrapper">
     {{> admin_header}}
     {{> admin_nav}}
-    <div class="content-page">          
+    <div class="content-page">
       {{{body}}}
       {{> admin_footer}}
     </div>
@@ -22,9 +28,6 @@
     var resizefunc = [];
   </script>
         <!-- jQuery  -->
-  <script src="/admin/js/jquery.min.js"></script>
-  <script src="/admin/js/popper.min.js"></script><!-- Popper for Bootstrap -->
-  <script src="/admin/js/bootstrap.min.js"></script>
   <script src="/admin/js/detect.js"></script>
   <script src="/admin/js/fastclick.js"></script>
   <script src="/admin/js/jquery.slimscroll.js"></script>
@@ -33,13 +36,11 @@
   <script src="/admin/js/wow.min.js"></script>
   <script src="/admin/js/jquery.nicescroll.js"></script>
   <script src="/admin/js/jquery.scrollTo.min.js"></script>
-  <script src="/admin/pages/jquery.dashboard_crm.js"></script>
+  {{!-- <script src="/admin/pages/jquery.dashboard_crm.js"></script> --}}
   <script src="/admin/js/jquery.core.js"></script>
   <script src="/admin/js/jquery.app.js"></script>
   <script>
-    $(function() {
-        $(".knob").knob();
-    });
+   
   </script>
 </body>
 </html>

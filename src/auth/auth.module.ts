@@ -18,7 +18,7 @@ import { JwtStrategy } from './jwt.strategy';
       useFactory: () => {
         const schema = UserSchema;
         schema.pre('save', async function () {
-          console.log('Hello from pre save');
+          console.log('Hello from pre save 1');
           const saltOrRounds = 10;
           if (this.password && this.isModified('password')) {
             this.password = await bcrypt.hash(this.password, saltOrRounds);

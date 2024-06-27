@@ -13,6 +13,37 @@
                                 </ol>
                             </div>
                         </div>
+                    <div class="row">
+                            <div class="col-md-6">
+                                <a href="/admin/listing-types" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-right" ><i class="md md-list"></i> All Listing Types</a>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-12 col-md-9">
+                                <div class="card-box">
+                                    <h4 class="text-dark header-title m-t-0"> Add Listing Types</h4>
+                                    {{#if flash.error}}
+                                        <div class="alert alert-danger">
+                                        {{{flash.error}}}
+                                        </div>
+                                    {{/if}}
+                                    {{#if flash.success}}
+                                        <div class="alert alert-success">
+                                        {{{flash.success}}}
+                                        </div>
+                                    {{/if}}
+                                    <form action="/admin/listing-type/save" method="post">
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input name="name" autocomplete="name" type="text" id="name" class="form-control" required="">
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="submit" class="waves-effect waves-light btn btn-success">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <!-- end row -->
                         
                     </div> <!-- container -->
