@@ -1,15 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument,Types } from 'mongoose';
+import { SEOSchema } from './seo.schema';
+import { CustomFieldSchema } from './customfield.schema';
 
 export type CategoryDocument = HydratedDocument<Category>;
 
 @Schema({timestamps: true})
 export class Category {
-
   @Prop()
   id: string;
 
-  @Prop()
+  @Prop({default:null})
   parentId: string;
   @Prop()
   parentName: string;
@@ -17,7 +18,7 @@ export class Category {
   @Prop()
   name: string;
 
-  @Prop()
+  @Prop({ required: true, unique: true })
   slug: string;
 
   @Prop()
@@ -29,25 +30,28 @@ export class Category {
   @Prop()
   description:string;
 
-  @Prop()
+  @Prop({default:false})
   hideDescription:boolean;
 
-  @Prop()
+  @Prop({type:Types.Array})
   customFields:object;
 
   @Prop()
-  type:object;
+  typeId:string;
 
   @Prop()
-  seoTags:object;
+  typeName:string;
 
-  @Prop()
+  @Prop({type:SEOSchema})
+  seo:object;
+
+  @Prop({default:true})
   dedicateForPermanentListings:boolean;
 
-  @Prop()
+  @Prop({default:true})
   status:boolean;
 
-  @Prop()
+  @Prop({default:false})
   childrenStatus:boolean;
 
   @Prop()
@@ -55,8 +59,5 @@ export class Category {
 
   @Prop()
   updatedAt:Date;
-
-
 }
-
 export const CategorySchema = SchemaFactory.createForClass(Category);

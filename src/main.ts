@@ -8,6 +8,8 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import * as hbs from 'hbs';
+const cors = require('cors');
+const moment = require('moment');
 async function bootstrap() {
   // Register a JSON helper
   
@@ -28,6 +30,7 @@ async function bootstrap() {
         },
         jsonParse: function (context: any) {
           var l = JSON.stringify(context);
+          console.log(JSON.parse(l),'l');
           return JSON.parse(l);
         },
         gt: function (a: number, b: number) {
@@ -37,8 +40,11 @@ async function bootstrap() {
           return a < b;
         },
         eq: function (a: any, b: any) {
-          ///console.log(a,b);
+          //console.log(a,b);
           return a == b;
+        },
+        formatDate:function(date){
+          return moment(date).format('MMM DD, YYYY hh:mm:ss A');
         }
       }
     }),
@@ -88,7 +94,7 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  
+  app.enableCors();
   await app.listen(3000);
 }
 bootstrap();

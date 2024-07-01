@@ -83,8 +83,18 @@ Vue.component('options', {
 var app = new Vue({
     el: '#addCat',
     data: function() {
+        fetch('/admin/category/get-custom-fields/'+catId, {
+            method: 'GET'
+          })
+          .then(response => response.text())
+          .then(result => {
+            var r = JSON.parse(result);
+            console.log(r);
+            this.allFields.fields = r;
+          }).catch(error => {
+            console.error('Error uploading file:', error);
+          });
         return {
-            //survey: { questions: [] },
             allFields:{ fields: [] },
             datas: '',
             error: false
@@ -101,6 +111,12 @@ var app = new Vue({
             console.log('val',value);
             if (value == 'radio' || value == 'checkbox'|| value == 'select') {
                 this.$set(this.allFields.fields[indx], 'options', [{}, {}]);
+            } else if (value == 'starrating') {
+                this.$set(this.allFields.fields[indx], 'scale', 5);
+                this.$set(this.allFields.fields[indx], 'shape', 'star');
+                this.$set(this.allFields.fields[indx], 'color', '#d0021b');
+
+                this.$set(this.allFields.fields[indx], 'options', [])
             } else {
                 this.$set(this.allFields.fields[indx], 'options', [])
             }
@@ -152,13 +168,14 @@ var slugApp = new Vue({
 });
 
 var drf = $('.dropify').dropify();
-function saveData(){
+function updateData(){
     const form = document.getElementById('catForm');
     var catForm = new FormData(form);
     catForm.append('customFields',JSON.stringify(app.allFields.fields)); 
+    catForm.append('id',catId); 
     var l = Ladda.create(document.querySelector('#saveBtn'));
     l.start();
-    fetch('/admin/category/save', {
+    fetch('/admin/category/saveEdit/'+catId, {
         method: 'POST',
         body: catForm
       })

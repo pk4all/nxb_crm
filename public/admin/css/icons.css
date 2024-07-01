@@ -15564,7 +15564,7 @@ File: Icons
   font-style: normal;
 }
 
-[data-icon]:before {
+/* [data-icon]:before {
   font-family: "dripicons-v2" !important;
   content: attr(data-icon);
   font-style: normal !important;
@@ -15574,7 +15574,7 @@ File: Icons
   speak: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+} */
 
 [class^="dripicons-"]:before,
 [class*=" dripicons-"]:before {

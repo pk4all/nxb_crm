@@ -9,19 +9,20 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/admin/dashboard">Adolaa</a></li>
                 <li class="breadcrumb-item"><a href="/admin/categories">Categories</a></li>
-                <li class="breadcrumb-item active">Add Category</li>
+                <li class="breadcrumb-item active">Edit Category</li>
             </ol>
         </div>
     </div>
 <div class="row">
     <div class="col-md-6">
-        <a href="/admin/categories" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-right"><i class="md md-list"></i> All Categories</a>
+        <a href="/admin/categories" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-list"></i> All Categories</a>
+        <a href="/admin/category/add" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-add"></i> Add New</a>
     </div>
 </div>
         <div class="row justify-content-md-center">
         <div class="col-sm-12 col-md-9">
             <div class="card-box">
-                <h4 class="text-dark header-title m-t-0">Add Category</h4>
+                <h4 class="text-dark header-title m-t-0">Edit Category</h4>
                 {{#if flash.error}}
                     <div class="alert alert-danger">
                     {{{flash.error}}}
@@ -32,14 +33,18 @@
                     {{{flash.success}}}
                     </div>
                 {{/if}}
-                <form id="catForm" action="/admin/category/save" method="post" enctype='multipart/form-data' onsubmit="return saveData();">
+                <form id="catForm" action="/admin/category/save" method="post" enctype='multipart/form-data' onsubmit="return updateData();">
                     <div class="mb-3">
                         <label for="example-select" class="form-label">Parent Category</label>
                         <select class="form-select form-control" id="example-select" name="parentId">
                             <option value="">Select A Category</option>
-                            {{#if allCats.length}}
+                            {{#if allCats.length }}
                             {{#each allCats as |ct|}}
-                                <option value="{{ct._id}}">{{ct.name}}</option>
+                                {{#if (eq ct._id ../categoryData.parentId)}}
+                                    <option value="{{ct._id}}" selected="">{{ct.name}}</option>
+                                {{else}}
+                                    <option value="{{ct._id}}">{{ct.name}}</option>
+                                {{/if}}
                             {{/each}}
                             {{/if}}
                         </select>
@@ -47,11 +52,11 @@
                     <div id="slugApp">
                         <div class="mb-3">
                         <label class="form-label">Name</label>
-                        <input name="name" autocomplete="name" type="text" id="name" class="form-control" required="" v-model="name">
+                        <input name="name" autocomplete="name" type="text" id="name" class="form-control" required="" v-model="name" value="{{categoryData.name}}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Slug</label>
-                        <input name="slug" v-model="slug" autocomplete="name" type="text" id="slug" class="form-control" required="">
+                        <input name="slug" v-model="slug" autocomplete="name" type="text" id="slug" class="form-control" required="" >
                     </div>
                     </div>
                     
@@ -59,35 +64,48 @@
                     <div class="mb-3">
                         <label class="form-label" for="">Icon</label>
                         <div >
-                            <button type="button" class="btn btn-secondary" role="iconpicker" name="icon"></button>
+                            <button type="button" class="btn btn-secondary" role="iconpicker" name="icon" data-icon="{{categoryData.icon}}" data-iconset="fontawesome5"></button>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="">Image</label>
                         <div>
+                            {{#if categoryData.image}}
+                            <input id="image" name="image" class="dropify" type="file" data-plugins="dropify" data-default-file="/uploads/category/{{categoryData.image}}">
+                            {{else}}
                             <input id="image" name="image" class="dropify" type="file" data-plugins="dropify" data-default-file="">
+                            {{/if}}
                         </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="">Description</label>
-                        <textarea id="tinymce-description"  name="description" rows="5" class="form-control tinymce" aria-hidden="true"></textarea>
+                        <textarea id="tinymce-description"  name="description" rows="5" class="form-control tinymce" aria-hidden="true">{{categoryData.description}}</textarea>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="">Type</label>
+                        <label class="form-label" for="">Type {{categoryData.typeId}}</label>
                         <select class="form-select form-control" id="example-select" name="typeId">
                             <option value="">Select A Type</option>
                             {{#if allTypes.length}}
-                            {{#each allTypes}}
-                                <option value="{{key}}">{{value}}</option>
-                            {{/each}}
+                                {{#each allTypes}}
+                                    {{#if (eq key ../categoryData.typeId)}}
+                                        <option value="{{key}}" selected="">{{value}}</option>
+                                    {{else}}
+                                        <option value="{{key}}">{{value}}</option>
+                                    {{/if}}
+                                {{/each}}
                             {{/if}}
                         </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="">Status</label>
                         <div>
+                            {{#if categoryData.status}}
                             <input type="checkbox" checked="" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
+                            {{else}}
+                            <input type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
+                            {{/if}}
+
                         </div>
                     </div>
 
@@ -107,15 +125,15 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Title</label>
-                        <input name="seo[title]" autocomplete="title" type="text" id="title" class="form-control">
+                        <input name="seo[title]" autocomplete="title" type="text" id="title" class="form-control" value="{{categoryData.seo.title}}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Description</label>
-                        <textarea  name="seo[description]" rows="4" class="form-control" aria-hidden="true"></textarea>
+                        <textarea  name="seo[description]" rows="4" class="form-control" aria-hidden="true">{{categoryData.seo.description}}</textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Keywords</label>
-                        <textarea  name="seo[keywords]" rows="5" class="form-control" aria-hidden="true"></textarea>
+                        <textarea  name="seo[keywords]" rows="5" class="form-control" aria-hidden="true">{{categoryData.seo.keywords}}</textarea>
                     </div>
                     <div class="mb-3">
                         <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
@@ -138,8 +156,10 @@
 <script src="https://cdn.tiny.cloud/1/xe0yrjzxxk4vt0m1103e4dazp7y4qisilkaiji7iozziavt1/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
-
-<script type="text/javascript" src="/admin/js/addform.js"></script>
+<script>
+    var catId = '{{id}}';
+</script>
+<script type="text/javascript" src="/admin/js/editform.js"></script>
 <script type="text/javascript">
     tinymce.init({
         selector: "textarea.tinymce",
@@ -151,6 +171,8 @@
         plugins: 'lists link table code',
         toolbar: 'undo redo | bold italic underline | forecolor backcolor | bullist numlist blockquote table | link unlink | alignleft aligncenter alignright | outdent indent | fontsizeselect | code',
      });
+slugApp.name='{{categoryData.name}}';
+slugApp.slug='{{categoryData.slug}}';
 </script>
 
 
