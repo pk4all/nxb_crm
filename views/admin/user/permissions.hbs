@@ -36,6 +36,7 @@
                                                         <th>Name</th>
                                                         <th>Path</th>
                                                         <th>Method</th>
+                                                        <th>Status</th>
                                                         <th>Created</th>
                                                     </tr>
                                                     </thead>
@@ -44,9 +45,16 @@
                                                     {{#each permissions }}
                                                    <tr>
                                                         <td>{{incrementedIndex @index}}</td>
-                                                        <td> <a class="permission" href="#"data-type="text" data-pk="1" data-title="Enter username">{{{this.name}}}</a> </td>
+                                                        <td> <a class="permission" href="#"data-type="text" data-pk="{{this._id}}" data-title="Enter username">{{{this.name}}}</a> </td>
                                                         <td>{{{this.path}}}</td>
                                                         <td>{{{this.method}}}</td>
+                                                        <td>
+                                                             {{#if this.status }}
+                                                                 <input id="{{this._id}}" class="switch" type="checkbox" checked=""  name="status" data-id="{{this._id}}">
+                                                            {{else}}
+                                                                <input id="{{this._id}}" class="switch" type="checkbox"  name="status" data-id="{{this._id}}">
+                                                            {{/if}}
+                                                        </td>
                                                         <td>{{{formatDate this.createdAt}}}</td>
                                                     </tr>
                                                    {{/each}}
@@ -73,17 +81,35 @@
     }
 
 </style>
-<script src="/admin/js/jquery-ui-1.10.1.custom.min.js"></script>
 <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 <script>
+$.fn.editableform.buttons='<button type="submit" class="btn btn-primary btn-sm editable-submit"><i class="fas fa-check"></i></button><button type="button" class="btn btn-warning btn-sm editable-cancel"><i class="fas fa-times"></i></button>';
+  $(document).ready(function() {
     $('.permission').editable({
-        url: '/admin/change-permission-name',
+        url: '/admin/user/change-permission-name',
         type: 'text',
-        pk: 1,
-        name: 'permission',
-        title: 'Enter Name'
+        name: 'name',
+        title: 'Enter Name',
+        mode:'inline'
     });
+    var switches = Array.prototype.slice.call(document.querySelectorAll('.switch'));
+        switches.forEach(function(switchElem) {
+            var switchery = new Switchery(switchElem);
+            switchElem.onchange = function() {
+                fetch('/admin/user/permission/change-status/'+switchElem.id, {
+                    method: 'POST'
+                })
+                .then(response => response.text())
+                .then(result => {
+                    var r = JSON.parse(result);
+                    console.log(r);
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+            };
+        });
+});
 
     var l = Ladda.create(document.querySelector('#syncBtn'));  
     const sync = ()=>{

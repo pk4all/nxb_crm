@@ -1,0 +1,90 @@
+    <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+                <div class="content">
+                    <div class="container-fluid">
+                        <!-- Page-Title -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="page-title">Add User</h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Adolaa</a></li>
+                                    <li class="breadcrumb-item"><a href="#">User</a></li>
+                                    <li class="breadcrumb-item active">Add User</li>
+                                </ol>
+                            </div>
+                        </div>
+                    <div class="row">
+                            <div class="col-md-6">
+                                <a href="/admin/users" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-right" ><i class="md md-list"></i> All Users</a>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-12 col-md-9">
+                                <div class="card-box">
+                                    <h4 class="text-dark header-title m-t-0"> Add User</h4>
+                                    {{#if flash.error}}
+                                        <div class="alert alert-danger">
+                                        {{{flash.error}}}
+                                        </div>
+                                    {{/if}}
+                                    {{#if flash.success}}
+                                        <div class="alert alert-success">
+                                        {{{flash.success}}}
+                                        </div>
+                                    {{/if}}
+                                    <form action="/admin/user/save" method="post">
+                                        <div class="mb-3">
+                                            <label class="form-label">Role</label>
+                                            {{#if allRoles.length }}
+                                                <select class="form-control" name="role" id="role">
+                                                {{#each allRoles }}
+                                                    <option value="{{this._id}}">{{this.name}}</option>
+                                                {{/each}}
+                                                </select>
+                                            {{/if}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input name="name" autocomplete="name" type="text" id="name" class="form-control" required="">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input name="email" autocomplete="email" type="email" id="email" class="form-control" required="">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone</label>
+                                            <input name="phone" autocomplete="phone" type="tel" id="phone" class="form-control" required="">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Password</label>
+                                            <input name="password" autocomplete="password" type="password" id="password" class="form-control" required="">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Status</label>
+                                            <div>
+                                                <input type="checkbox" checked="" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="submit" class="waves-effect waves-light btn btn-success">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+<script>
+    $(function(){
+        $('#selectAll').change(function() {
+        var checked = $(this).is(':checked');
+        $('input[type="checkbox"]').not(this).prop('checked', checked);
+      });
+    });
+</script>          
+
+

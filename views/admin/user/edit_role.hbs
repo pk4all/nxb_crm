@@ -1,0 +1,97 @@
+    <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+                <div class="content">
+                    <div class="container-fluid">
+                        <!-- Page-Title -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="page-title">Add Role</h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Adolaa</a></li>
+                                    <li class="breadcrumb-item"><a href="#">User</a></li>
+                                    <li class="breadcrumb-item active">Edit Role</li>
+                                </ol>
+                            </div>
+                        </div>
+                    <div class="row">
+                            <div class="col-md-6">
+                                <a href="/admin/user/roles" class="btn btn-default btn-md waves-effect waves-light m-b-30" ><i class="md md-list"></i> All User Roles</a>
+                                <a href="/admin/user/role/add" class="btn btn-default btn-md waves-effect waves-light m-b-30" ><i class="md md-add"></i> Add User Roles</a>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-12 col-md-9">
+                                <div class="card-box">
+                                    <h4 class="text-dark header-title m-t-0"> Edit Role</h4>
+                                    {{#if flash.error}}
+                                        <div class="alert alert-danger">
+                                        {{{flash.error}}}
+                                        </div>
+                                    {{/if}}
+                                    {{#if flash.success}}
+                                        <div class="alert alert-success">
+                                        {{{flash.success}}}
+                                        </div>
+                                    {{/if}}
+                                    <form action="/admin/user-role/update/{{roleData._id}}" method="post">
+                                        <div class="mb-3">
+                                            <label class="form-label">Role Name</label>
+                                            <input name="name" autocomplete="name" type="text" id="name" class="form-control" value="{{roleData.name}}" required="">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <h4 class="text-dark header-title m-t-0"> Permissions <span class="pull-right">Select All <input id="selectAll" type="checkbox" value=""></span> </h4>
+                                            
+                                            <div class="row">
+                                                {{#if allPermissions.length }}
+                                                {{#each allPermissions }}
+                                                <div class="col-md-4 checkbox checkbox-primary checkbox-single">
+                                                    {{#if (permissionIn this._id ../roleData.permissions) }}
+                                                        <input type="checkbox" value="{{this._id}}" name="permissions[]" checked="true">
+                                                        {{this.name}}
+                                                        
+                                                    {{else}}
+
+                                                        <input type="checkbox" value="{{this._id}}" name="permissions[]">
+                                                        {{this.name}}
+                                                   {{/if}}
+                                                </div>
+
+                                                {{/each}}
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Status</label>
+                                            <div>
+                                                {{#if roleData.status }}
+                                                        <input id="{{roleData._id}}" class="switch" type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" checked=""  name="status" data-id="{{roleData._id}}">
+                                                {{else}}
+                                                    <input id="{{roleData._id}}" class="switch" type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-switchery="true"  name="status" data-id="{{roleData._id}}">
+                                                {{/if}}
+                                            
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="submit" class="waves-effect waves-light btn btn-success">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+<script>
+    $(function(){
+        $('#selectAll').change(function() {
+        var checked = $(this).is(':checked');
+        $('input[type="checkbox"]').not(this).prop('checked', checked);
+      });
+    });
+</script>          
+
+

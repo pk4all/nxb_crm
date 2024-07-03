@@ -183,7 +183,7 @@ export class CategoryController {
             res.json({status:'error',message: error.message});
         }
     }
-    @Post('/category/update-status/:id')
+    @Post('/category/change-status/:id')
     async updateStatus(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
         var data = req?.body||{};
         console.log(data,id);

@@ -10,7 +10,7 @@ export class SessionGuard implements CanActivate {
     if(!request.session.user){
       request.session.flash = {
         error: 'You are not authorized for this page, Please login first.',
-    };
+      };
       response.redirect('/admin/login');
     }
     return request.session.user ? true : false;

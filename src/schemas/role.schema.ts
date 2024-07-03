@@ -1,25 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument,Types } from 'mongoose';
+import { SEOSchema } from './seo.schema';
 
-export type PermissionsDocument = HydratedDocument<Permission>;
+export type RoleDocument = HydratedDocument<Role>;
 
 @Schema({timestamps: true})
-export class Permission {
- 
+export class Role {
   @Prop()
-  path: string;
+  id: string; 
+
 
   @Prop()
   name: string;
 
-  @Prop()
-  slug: string;
+  @Prop({type:Types.Array})
+  permissions:object;
 
-  @Prop()
-  method: string;
 
   @Prop({default:true})
-  status: boolean;
+  status:boolean;
 
   @Prop()
   createdAt:Date;
@@ -27,4 +26,4 @@ export class Permission {
   @Prop()
   updatedAt:Date;
 }
-export const PermissionSchema = SchemaFactory.createForClass(Permission);
+export const RoleSchema = SchemaFactory.createForClass(Role);

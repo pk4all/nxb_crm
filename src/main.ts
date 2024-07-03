@@ -8,8 +8,8 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import * as hbs from 'hbs';
-const cors = require('cors');
 const moment = require('moment');
+const express = require('express');
 async function bootstrap() {
   // Register a JSON helper
   
@@ -30,7 +30,7 @@ async function bootstrap() {
         },
         jsonParse: function (context: any) {
           var l = JSON.stringify(context);
-          console.log(JSON.parse(l),'l');
+          //console.log(JSON.parse(l),'l');
           return JSON.parse(l);
         },
         gt: function (a: number, b: number) {
@@ -40,9 +40,20 @@ async function bootstrap() {
           return a < b;
         },
         eq: function (a: any, b: any) {
-          //console.log(a,b);
           return a == b;
         },
+        permissionIn: function (id: any, permissions: any) {
+          const p = permissions.filter(elm=>(elm.id).toString()==id.toString());
+          if(p[0]){
+            return true;
+          }else{
+            return false;
+          }
+        },
+        ternary: function (condition, valueIfTrue, valueIfFalse) {
+          return condition ? valueIfTrue : valueIfFalse;
+        },
+
         formatDate:function(date){
           return moment(date).format('MMM DD, YYYY hh:mm:ss A');
         }
@@ -95,6 +106,11 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.enableCors();
+  app.use(express.urlencoded({ extended: true }));
+  app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+  });
   await app.listen(3000);
 }
 bootstrap();

@@ -3,8 +3,18 @@ import { HydratedDocument } from 'mongoose';
 
 export type AdminDocument = HydratedDocument<Admin>;
 
+const timeZone = [
+
+];
+
 @Schema({timestamps: true})
 export class Admin {
+
+  @Prop()
+  role: string;
+
+  @Prop()
+  roleName: string;
 
   @Prop()
   name: string;
@@ -26,6 +36,12 @@ export class Admin {
 
   @Prop()
   token: string;
+
+  @Prop()
+  status:boolean;
+
+  @Prop()
+  timeZone: string;
 
   @Prop()
   createdAt:Date;

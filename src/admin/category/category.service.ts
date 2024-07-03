@@ -29,7 +29,8 @@ export class CategoryService {
             const createdType = new this.listingTypeModel(createListingTypeDto);
             return await createdType.save();
         } catch (error) {
-            return error?.message||'Data not saved'
+            throw new ConflictException(error?.message||'Data not saved');
+            //return error?.message||'Data not saved'
         } 
     }
 

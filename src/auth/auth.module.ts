@@ -5,6 +5,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../schemas/user.schema';
+import { Admin, AdminSchema } from '../schemas/admin.schema';
 import * as bcrypt from 'bcrypt';
 // import { JwtAuthGuard } from './auth.guard';
 import { jwtConstants } from './constants';
@@ -18,7 +19,6 @@ import { JwtStrategy } from './jwt.strategy';
       useFactory: () => {
         const schema = UserSchema;
         schema.pre('save', async function () {
-          console.log('Hello from pre save 1');
           const saltOrRounds = 10;
           if (this.password && this.isModified('password')) {
             this.password = await bcrypt.hash(this.password, saltOrRounds);
@@ -26,9 +26,22 @@ import { JwtStrategy } from './jwt.strategy';
           }
         });
         return schema;
-      },
-
-    }]
+      }
+    },
+    { name: Admin.name,
+      useFactory: () => {
+        const schema = AdminSchema;
+        schema.pre('save', async function () {
+          const saltOrRounds = 10;
+          if (this.password && this.isModified('password')) {
+            this.password = await bcrypt.hash(this.password, saltOrRounds);
+            //const isMatch = await bcrypt.compare(password, hash);
+          }
+        });
+        return schema;
+      }
+    },
+  ]
   ),
   JwtModule.register({
     //global: true,
