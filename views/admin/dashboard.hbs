@@ -1,14 +1,11 @@
     <!-- ============================================================== -->
             <!-- Start right Content here -->
             <!-- ============================================================== -->
-            
                 <div class="content">
                     <div class="container-fluid">
-
                         <!-- Page-Title -->
                         <div class="row">
                             <div class="col-sm-12">
-                                
                                 <h4 class="page-title">Dashboard</h4>
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Adolaa</a></li>
@@ -17,8 +14,15 @@
                                 </ol>
                             </div>
                         </div>
-
+                        {{#if flash.error}}
+                            <div class="row"></div>
+                                <div class="alert alert-danger">
+                                {{{flash.error}}}
+                                </div>
+                            </div>
+                        {{/if}}
                         <div class="row">
+                            
                             <div class="col-lg-4">
                                 <div class="card-box">
                                     <div class="bar-widget">

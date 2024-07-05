@@ -10,7 +10,7 @@ const timeZone = [
 @Schema({timestamps: true})
 export class Admin {
 
-  @Prop()
+  @Prop({ref: 'Role'})
   role: string;
 
   @Prop()

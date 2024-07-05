@@ -28,6 +28,21 @@ import { JwtStrategy } from './jwt.strategy';
         return schema;
       }
     },
+    { name: User.name,
+      useFactory: () => {
+        const schema = UserSchema;
+        schema.pre('findOneAndUpdate', async function (next) {
+          const saltOrRounds = 10;
+          const password= this.get('password');
+          if(password){
+            this.set({ password: await bcrypt.hash(password, saltOrRounds) });
+          }
+          next();
+        });
+        return schema;
+      }
+    },
+
     { name: Admin.name,
       useFactory: () => {
         const schema = AdminSchema;
@@ -37,6 +52,24 @@ import { JwtStrategy } from './jwt.strategy';
             this.password = await bcrypt.hash(this.password, saltOrRounds);
             //const isMatch = await bcrypt.compare(password, hash);
           }
+        });
+        return schema;
+      }
+    },
+    { name: Admin.name,
+      useFactory: () => {
+        const schema = AdminSchema;
+        schema.pre('findOneAndUpdate', async function (next) {
+          const saltOrRounds = 10;
+          // if (this.password && this.isModified('password')) {
+          //   this.password = await bcrypt.hash(this.password, saltOrRounds);
+          //   //const isMatch = await bcrypt.compare(password, hash);
+          // }
+          const password= this.get('password');
+          if(password){
+            this.set({ password: await bcrypt.hash(password, saltOrRounds) });
+          }
+          next();
         });
         return schema;
       }

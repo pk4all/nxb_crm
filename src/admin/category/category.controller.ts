@@ -25,11 +25,10 @@ import * as fs from 'fs';
 import sharp from 'sharp';
 @ApiExcludeController()
 @Controller('admin')
-@UseGuards(SessionGuard)
 export class CategoryController {
 
     constructor(private readonly categoryService: CategoryService) {}
-
+    @UseGuards(SessionGuard)
     @Get('/categories')
     @Render('admin/category/categories_list')
     async categories(@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'createdAt',@Query('sortOrder') sortOrder: string = 'desc',@Req() req: Request): Promise<{ categories:any, pagination:any,layout:string}>{
@@ -46,7 +45,7 @@ export class CategoryController {
             };
         }
     }
-
+    @UseGuards(SessionGuard)
     @Get('/category/add')
     @Render('admin/category/add_category')
     async addCategory(@Req() req: Request, @Res() res: Response){
@@ -55,6 +54,8 @@ export class CategoryController {
         const allCats = await this.categoryService.getAllcats();
         return {layout:'admin',allTypes,allCats};
     }
+
+    @UseGuards(SessionGuard)
     @Get('/category/edit/:id')
     @Render('admin/category/edit_category')
     async editCategory(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
@@ -74,7 +75,7 @@ export class CategoryController {
         const customFields = categoryData['customFields'];
         res.json(customFields);
     }
-
+    @UseGuards(SessionGuard)
     @Post('/category/save')
     @UseInterceptors(FileInterceptor('image', {
         storage: diskStorage({
@@ -129,6 +130,7 @@ export class CategoryController {
         }
     }
 
+    @UseGuards(SessionGuard)
     @Post('/category/saveEdit/:id')
     @UseInterceptors(FileInterceptor('image', {
         storage: diskStorage({
@@ -183,6 +185,8 @@ export class CategoryController {
             res.json({status:'error',message: error.message});
         }
     }
+
+    @UseGuards(SessionGuard)
     @Post('/category/change-status/:id')
     async updateStatus(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
         var data = req?.body||{};
@@ -201,7 +205,7 @@ export class CategoryController {
         }
     }
 
-
+    @UseGuards(SessionGuard)
     @Post('/delete-category/:id')
     async deleteCategory(@Param('id') id: string,@Req() req: Request, @Res() res: Response) {
         try {
@@ -224,6 +228,7 @@ export class CategoryController {
         }
     }
 
+    @UseGuards(SessionGuard)
     @Get('/listing-types')
     @Render('admin/category/listing_type_list')
     async listingTypes(@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'createdAt',@Query('sortOrder') sortOrder: string = 'desc',@Req() req: Request): Promise<{ listingTypes:any, pagination:any,layout:string}>{
@@ -239,12 +244,14 @@ export class CategoryController {
         }
     }
 
+    @UseGuards(SessionGuard)
     @Get('/listing-type/add')
     @Render('admin/category/add_listing_type')
     async addListingType(@Req() req: Request, @Res() res: Response){
         return {layout:'admin'}
     }
 
+    @UseGuards(SessionGuard)
     @Post('/listing-type/save')
     async saveListingType(@Req() req: Request, @Res() res: Response){
         try {
@@ -264,6 +271,7 @@ export class CategoryController {
         }
     }
 
+    @UseGuards(SessionGuard)
     @Post('/delete-listing-type/:id')
     async deleteType(@Param('id') id: string,@Req() req: Request, @Res() res: Response) {
         try {

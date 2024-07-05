@@ -14,6 +14,9 @@ export class UserController {
     @Get('/login')
     @Render('admin/login')
     async login(@Req() req: Request, @Res() res: Response){
+        if(req.session.user){
+            res.redirect('/admin/dashboard');
+        }
         return {layout:'login',session: req.session}
     }
     @Post('/admin-login')
@@ -21,16 +24,14 @@ export class UserController {
     async adminLogin(@Req() req: Request, @Res() res: Response){
         try {
             let u:any = await this.userService.signIn(req?.body?.email,req?.body?.password);
-            if(u?.status=='success'){
-                req.session.user = u?.user||{};
+            if(u?.status == 'success'){
+                req.session.user = u?.user;
                 return res.redirect('/admin/dashboard');
             }else{
                 req.session.flash = {
                     error: u?.message,
                 };
-                req.session.user ={};
-                return res.redirect('/admin/login');
-                
+                return res.redirect('/admin/login');    
             }
         } catch (error) {
             req.session.flash = {
@@ -56,6 +57,7 @@ export class UserController {
     @UseGuards(SessionGuard)
     @Get('/dashboard')
     getDashboard(@Req() req: Request, @Res() res: Response) {
+        //console.log(req.session.user);
         res.render('admin/dashboard', {layout:'admin'});
     }
 
@@ -356,6 +358,13 @@ export class UserController {
         }catch (error){
             res.json({status:'error',message: error.message});
         }
+    }
+
+    @UseGuards(SessionGuard)
+    @Get('/user/profile')
+    @Render('admin/user/profile')
+    async profile(@Req() req: Request, @Res() res: Response){
+        return {layout:'admin'}
     }
 
 }

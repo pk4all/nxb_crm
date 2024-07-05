@@ -5,24 +5,24 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
-            <h4 class="page-title">Add Category</h4>
+            <h4 class="page-title">Edit Page</h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/admin/dashboard">Adolaa</a></li>
-                <li class="breadcrumb-item"><a href="/admin/categories">Categories</a></li>
-                <li class="breadcrumb-item active">Edit Category</li>
+                <li class="breadcrumb-item"><a href="/admin/pages">Pages</a></li>
+                <li class="breadcrumb-item active">Edit Page</li>
             </ol>
         </div>
     </div>
 <div class="row">
     <div class="col-md-6">
-        <a href="/admin/categories" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-list"></i> All Categories</a>
-        <a href="/admin/category/add" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-add"></i> Add New</a>
+        <a href="/admin/pages" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-list"></i> All Pages</a>
+        <a href="/admin/page/add" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-add"></i> Add New</a>
     </div>
 </div>
         <div class="row justify-content-md-center">
         <div class="col-sm-12 col-md-9">
             <div class="card-box">
-                <h4 class="text-dark header-title m-t-0">Edit Category</h4>
+                <h4 class="text-dark header-title m-t-0">Edit Page</h4>
                 {{#if flash.error}}
                     <div class="alert alert-danger">
                     {{{flash.error}}}
@@ -33,45 +33,25 @@
                     {{{flash.success}}}
                     </div>
                 {{/if}}
-                <form id="catForm" action="/admin/category/save" method="post" enctype='multipart/form-data' onsubmit="return updateData();">
-                    <div class="mb-3">
-                        <label for="example-select" class="form-label">Parent Category</label>
-                        <select class="form-select form-control" id="example-select" name="parentId">
-                            <option value="">Select A Category</option>
-                            {{#if allCats.length }}
-                            {{#each allCats as |ct|}}
-                                {{#if (eq ct._id ../categoryData.parentId)}}
-                                    <option value="{{ct._id}}" selected="">{{ct.name}}</option>
-                                {{else}}
-                                    <option value="{{ct._id}}">{{ct.name}}</option>
-                                {{/if}}
-                            {{/each}}
-                            {{/if}}
-                        </select>
-                    </div>
+                <form id="pageForm" action="/admin/page/update/{{page._id}}" method="post" enctype='multipart/form-data' onsubmit="return updateData();">
+                    
                     <div id="slugApp">
                         <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input name="name" autocomplete="name" type="text" id="name" class="form-control" required="" v-model="name" value="{{categoryData.name}}">
+                            {{!-- {{json page.image}} --}}
+                        <label class="form-label">Title</label>
+                        <input name="title" autocomplete="title" type="text" id="title" class="form-control" required="" v-model="title" value="{{page.title}}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Slug</label>
-                        <input name="slug" v-model="slug" autocomplete="name" type="text" id="slug" class="form-control" required="" >
+                        <input name="slug" v-model="slug" autocomplete="slug" type="text" id="slug" class="form-control" required="" >
                     </div>
                     </div>
                     
-
-                    <div class="mb-3">
-                        <label class="form-label" for="">Icon</label>
-                        <div >
-                            <button type="button" class="btn btn-secondary" role="iconpicker" name="icon" data-icon="{{categoryData.icon}}" data-iconset="fontawesome5"></button>
-                        </div>
-                    </div>
                     <div class="mb-3">
                         <label class="form-label" for="">Image</label>
                         <div>
-                            {{#if categoryData.image}}
-                            <input id="image" name="image" class="dropify" type="file" data-plugins="dropify" data-default-file="/uploads/category/{{categoryData.image}}">
+                            {{#if page.image}}
+                            <input id="image" name="image" class="dropify" type="file" data-plugins="dropify" data-default-file="/uploads/page/{{page.image}}">
                             {{else}}
                             <input id="image" name="image" class="dropify" type="file" data-plugins="dropify" data-default-file="">
                             {{/if}}
@@ -79,28 +59,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="">Description</label>
-                        <textarea id="tinymce-description"  name="description" rows="5" class="form-control tinymce" aria-hidden="true">{{categoryData.description}}</textarea>
+                        <textarea id="tinymce-description"  name="description" rows="5" class="form-control tinymce" aria-hidden="true">{{{page.description}}}</textarea>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="">Type</label>
-                        <select class="form-select form-control" id="example-select" name="typeId">
-                            <option value="">Select A Type</option>
-                            {{#if allTypes.length}}
-                                {{#each allTypes}}
-                                    {{#if (eq key ../categoryData.typeId)}}
-                                        <option value="{{key}}" selected="">{{value}}</option>
-                                    {{else}}
-                                        <option value="{{key}}">{{value}}</option>
-                                    {{/if}}
-                                {{/each}}
-                            {{/if}}
-                        </select>
-                    </div>
-                    <div class="mb-3">
                         <label class="form-label" for="">Status</label>
                         <div>
-                            {{#if categoryData.status}}
+                            {{#if page.status}}
                             <input type="checkbox" checked="" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
                             {{else}}
                             <input type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
@@ -109,13 +74,7 @@
                         </div>
                     </div>
 
-                    <h4 class="text-dark header-title m-t-0">Custom Fields</h4>
-                    <div class="mb-3">
-                        <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
-                    </div>
-                    <div id="addCat" class="mb-3">
-                        <custom-fields v-bind:survey_1="allFields" v-bind:datas="datas" ></custom-fields>
-                    </div>
+                 
                     <div class="mb-3">
                         <hr style="border: 1px dashed #EFEFEF;" class="mt-0 mb-1">
                     </div>
@@ -125,15 +84,19 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Title</label>
-                        <input name="seo[title]" autocomplete="title" type="text" id="title" class="form-control" value="{{categoryData.seo.title}}">
+                        <input name="seo[title]" autocomplete="title" type="text" id="title" class="form-control" value="{{page.seo.title}}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Description</label>
-                        <textarea  name="seo[description]" rows="4" class="form-control" aria-hidden="true">{{categoryData.seo.description}}</textarea>
+                        <textarea  name="seo[description]" rows="4" class="form-control" aria-hidden="true">{{page.seo.description}}</textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Keywords</label>
-                        <textarea  name="seo[keywords]" rows="5" class="form-control" aria-hidden="true">{{categoryData.seo.keywords}}</textarea>
+                        <textarea  name="seo[keywords]" rows="5" class="form-control" aria-hidden="true">{{page.seo.keywords}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Og Tags</label>
+                        <textarea  name="seo[ogTags]" rows="5" class="form-control" aria-hidden="true">{{page.seo.ogTags}}</textarea>
                     </div>
                     <div class="mb-3">
                         <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
@@ -157,9 +120,9 @@
 <script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
 <script>
-    var catId = '{{id}}';
+    var pageId = '{{id}}';
 </script>
-<script type="text/javascript" src="/admin/js/editform.js"></script>
+
 <script type="text/javascript">
     tinymce.init({
         selector: "textarea.tinymce",
@@ -171,8 +134,64 @@
         plugins: 'lists link table code',
         toolbar: 'undo redo | bold italic underline | forecolor backcolor | bullist numlist blockquote table | link unlink | alignleft aligncenter alignright | outdent indent | fontsizeselect | code',
      });
-slugApp.name='{{categoryData.name}}';
-slugApp.slug='{{categoryData.slug}}';
+
+var drf = $('.dropify').dropify();
+var slugApp = new Vue({
+    el: '#slugApp',
+    data: function() {
+        return {
+            title:'{{page.title}}',
+            slug:'{{page.slug}}',
+            datas: '',
+        }
+    },computed: {
+        slug() {
+          return this.slugify(this.title);
+        }
+      },
+      methods: {
+        slugify(text) {
+          return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')           // Replace spaces with -
+            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+            .replace(/\-\-+/g, '-');      // Replace multiple - with single -
+        }
+    }
+});
+slugApp.name='{{page.title}}';
+slugApp.slug='{{page.slug}}';
+function updateData(){
+    const form = document.getElementById('pageForm');
+    var pageForm = new FormData(form);
+    var l = Ladda.create(document.querySelector('#saveBtn'));
+    l.start();
+    fetch('/admin/page/update/'+pageId, {
+        method: 'POST',
+        body: pageForm
+      })
+      .then(response => response.text())
+      .then(result => {
+        l.stop();
+        result = JSON.parse(result);
+        if(result.status=='success'){
+            $('#outMsg').html('<div class="alert alert-success">'+result?.message+'</div>');
+            //form.reset();
+        }
+        if(result.status=='error'){
+            $('#outMsg').html('<div class="alert alert-danger">'+result?.message+'</div>');
+        }
+      })
+      .catch(error => {
+        l.stop();
+        $('#outMsg').html('<div class="alert alert-danger">'+error?.message+'</div>');
+
+      });
+
+    return false;
+}
 </script>
 
 

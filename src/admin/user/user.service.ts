@@ -15,19 +15,20 @@ export class UserService {
         @InjectModel(Role.name) private roleModel: Model<Role>,
       ){}
     async findLogin(email: string): Promise<Admin | undefined> {
-        return this.adminModel.findOne({email}).exec();
+        return (await this.adminModel.findOne({email}).exec()).populate('role');
       }
 
     async signIn(username: string, pass: string) {
       try {
         const user = await this.findLogin(username);
-       //return user;
         if(user){
             const isMatch = await bcrypt.compare(pass, user?.password);
             //return isMatch;
             if (!isMatch) {
-              throw new BadRequestException('User name or password is not valid', { cause: new Error(), description: 'Invalid Credentials or worng password.' });
+              //return {message:'Password is not valid',status:'error'};
+             // throw new BadRequestException('User name or password is not valid', { cause: new Error(), description: 'Invalid Credentials or worng password.' });
             }
+            //delete user['password'];
             return {user:user,status:'success'};
         }
         return {message:'User name or password is not valid',status:'error'};

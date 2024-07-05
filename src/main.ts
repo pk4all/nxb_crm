@@ -10,6 +10,7 @@ import passport from 'passport';
 import * as hbs from 'hbs';
 const moment = require('moment');
 const express = require('express');
+require('dotenv').config();
 async function bootstrap() {
   // Register a JSON helper
   
@@ -56,7 +57,12 @@ async function bootstrap() {
 
         formatDate:function(date){
           return moment(date).format('MMM DD, YYYY hh:mm:ss A');
+        },
+        selected: function (a: any, b: any) {
+          return a==b?'selected':'';
         }
+
+
       }
     }),
   );
@@ -94,13 +100,16 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.use(
     session({
-      secret: 'f1d2d2f924e986ac86fdf7b36c94bcdf32beec15a0a48641b8edc446620aeb8f',
-      resave: true,
-      saveUninitialized: true,
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl:'mongodb://localhost/adolaa', // Use MongoDB URI from environment variables
+        mongoUrl:process.env.MONGO_URI, // Use MongoDB URI from environment variables
         collectionName: 'sessions',
       }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+      },
     }),
   );
   app.use(passport.initialize());

@@ -1,0 +1,176 @@
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="content">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 class="page-title">Add Page</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/dashboard">Adolaa</a></li>
+                <li class="breadcrumb-item"><a href="/admin/pages">Pages</a></li>
+                <li class="breadcrumb-item active">Add Page</li>
+            </ol>
+        </div>
+    </div>
+<div class="row">
+    <div class="col-md-6">
+        <a href="/admin/pages" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-right"><i class="md md-list"></i> All Pages</a>
+    </div>
+</div>
+        <div class="row justify-content-md-center">
+        <div class="col-sm-12 col-md-9">
+            <div class="card-box">
+                <h4 class="text-dark header-title m-t-0">Add Page</h4>
+                {{#if flash.error}}
+                    <div class="alert alert-danger">
+                    {{{flash.error}}}
+                    </div>
+                {{/if}}
+                {{#if flash.success}}
+                    <div class="alert alert-success">
+                    {{{flash.success}}}
+                    </div>
+                {{/if}}
+                <form id="pageForm" action="/admin/page/create" method="post" enctype='multipart/form-data' onsubmit="return saveData();">
+                    <div id="slugApp">
+                        <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input name="title" autocomplete="title" type="text" id="title" class="form-control" required="" v-model="title">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Slug</label>
+                        <input name="slug" v-model="slug" autocomplete="slug" type="text" id="slug" class="form-control" required="">
+                    </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="">Image</label>
+                        <div>
+                            <input id="image" name="image" class="dropify" type="file" data-plugins="dropify" data-default-file="">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="">Description</label>
+                        <textarea id="tinymce-description"  name="description" rows="5" class="form-control tinymce" aria-hidden="true"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="">Status</label>
+                        <div>
+                            <input type="checkbox" checked="" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
+                    </div>
+                    <h4 class="text-dark header-title m-t-0">SEO Tags</h4>
+                    <div class="mb-3">
+                        <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input name="seo[title]" autocomplete="title" type="text" id="title" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea  name="seo[description]" rows="4" class="form-control" aria-hidden="true"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Keywords</label>
+                        <textarea  name="seo[keywords]" rows="5" class="form-control" aria-hidden="true"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Og Tags</label>
+                        <textarea  name="seo[ogTags]" rows="5" class="form-control" aria-hidden="true"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
+                    </div>
+                    <div class="mb-3">
+                        <button id="saveBtn" type="submit" class=" waves-light btn btn-success btn-md waves-effect"><i class="md md-add"></i>Save</button>
+                    </div>
+                    <div id="outMsg" class="mb-3">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div> <!-- container -->
+</div> <!-- content -->
+<script src="https://cdn.tiny.cloud/1/xe0yrjzxxk4vt0m1103e4dazp7y4qisilkaiji7iozziavt1/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script type="text/javascript" src="https://jeremyfagis.github.io/dropify/dist/js/dropify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://jeremyfagis.github.io/dropify/dist/css/dropify.min.css">
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea.tinymce",
+        language: 'en',
+        directionality: 'ltr',
+        height: 400,
+        menubar: false,
+        statusbar: false,
+        plugins: 'lists link table code',
+        toolbar: 'undo redo | bold italic underline | forecolor backcolor | bullist numlist blockquote table | link unlink | alignleft aligncenter alignright | outdent indent | fontsizeselect | code',
+     });
+var drf = $('.dropify').dropify();
+var slugApp = new Vue({
+    el: '#slugApp',
+    data: function() {
+        return {
+            title:'',
+            datas: '',
+        }
+    },computed: {
+        slug() {
+          return this.slugify(this.title);
+        }
+      },
+      methods: {
+        slugify(text) {
+          return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')           // Replace spaces with -
+            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+            .replace(/\-\-+/g, '-');        // Replace multiple - with single -
+        }
+    }
+});
+
+function saveData(){
+    const form = document.getElementById('pageForm');
+    var pageForm = new FormData(form);
+    var l = Ladda.create(document.querySelector('#saveBtn'));
+    l.start();
+    fetch('/admin/page/create', {
+        method: 'POST',
+        body: pageForm
+      })
+      .then(response => response.text())
+      .then(result => {
+        l.stop();
+        result = JSON.parse(result);
+        if(result.status=='success'){
+            $('#outMsg').html('<div class="alert alert-success">'+result?.message+'</div>');
+            form.reset();
+        }
+        if(result.status=='error'){
+            $('#outMsg').html('<div class="alert alert-danger">'+result?.message+'</div>');
+        }
+      })
+      .catch(error => {
+        l.stop();
+        $('#outMsg').html('<div class="alert alert-danger">'+error?.message+'</div>');
+
+      });
+
+    return false;
+}
+</script>
+
+
+
+
