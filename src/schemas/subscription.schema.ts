@@ -12,10 +12,10 @@ export class Subscription {
   name: string;
 
   @Prop()
-  price: string;
+  price: number;
 
   @Prop()
-  duration: string;
+  duration: number;
 
   @Prop()
   interval: string;

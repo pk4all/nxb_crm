@@ -57,7 +57,7 @@ export class UserService {
       const { limit, search,page=1} = paginationQuery;
       const sortCriteria:any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
       const query = search ? { title: new RegExp(search, 'i') } : {};
-      const l = limit||5;
+      const l = limit||20;
       const ofs = ((page-1)*l);
       return this.permissionModel
         .find(query)

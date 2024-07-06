@@ -1,0 +1,137 @@
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="content">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 class="page-title">Edit Subscription</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/dashboard">Adolaa</a></li>
+                <li class="breadcrumb-item"><a href="/admin/subscriptions">Ads</a></li>
+                <li class="breadcrumb-item active">Edit Ads</li>
+            </ol>
+        </div>
+    </div>
+<div class="row">
+    <div class="col-md-6">
+        <a href="/admin/subscriptions" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-list"></i> All subscription</a>
+        <a href="/admin/subscription/add" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-add"></i> Add New</a>
+    </div>
+</div>
+        <div class="row justify-content-md-center">
+        <div class="col-sm-12 col-md-9">
+            <div class="card-box">
+                <h4 class="text-dark header-title m-t-0">Edit subscription</h4>
+                {{#if flash.error}}
+                    <div class="alert alert-danger">
+                    {{{flash.error}}}
+                    </div>
+                {{/if}}
+                {{#if flash.success}}
+                    <div class="alert alert-success">
+                    {{{flash.success}}}
+                    </div>
+                {{/if}}
+                <form id="pageForm" action="/admin/subscription/update/{{id}}" method="post" onsubmit="return updateData()">
+                 <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input id="name" name="name" autocomplete="name" type="text" class="form-control" required="" value="{{subscription.name}}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price</label>
+                        <input id="price" name="price" autocomplete="price" type="text" class="form-control" value="{{subscription.price}}" required="">
+                    </div>
+                     <div class="mb-3">
+                        <label class="form-label">Duration</label>
+                        <input id="duration" name="duration" autocomplete="duration" type="text" class="form-control" value="{{subscription.duration}}" required="">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Interval</label>
+                        <select class="form-control" name="interval" id="interval">
+                            <option value="one_time" {{selected subscription.interval 'one_time'}}>One Time</option>
+                            <option value="weekly" {{selected subscription.interval 'weekly'}}>Weekly</option>
+                            <option value="monthly" {{selected subscription.interval 'monthly'}}>Monthly</option>
+                            <option value="yearly" {{selected subscription.interval 'yearly'}}>Yearly</option>
+                        </select>
+                    </div>
+                     <div class="mb-3">
+                        <label class="form-label">Listing Limit</label>
+                        <input id="listingLimit" name="listingLimit" autocomplete="listingLimit" type="text" class="form-control" value="{{subscription.listingLimit}}" required="">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="">Description</label>
+                        <textarea id="description"  name="description" rows="5" class="form-control tinymce" aria-hidden="true">{{subscription.description}}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="">Status</label>
+                        <div>
+                            {{#if subscription.status}}
+                            <input id="status" type="checkbox" checked="" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
+                            {{else}}
+                            <input id="status" type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
+                            {{/if}}
+
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button id="saveBtn" type="submit" class=" waves-light btn btn-success btn-md waves-effect"><i class="md md-add"></i>Save</button>
+                    </div>
+                    <div id="outMsg" class="mb-3">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div> <!-- container -->
+</div> <!-- content -->
+
+<script type="text/javascript">
+ 
+function updateData(){
+   
+    var l = Ladda.create(document.querySelector('#saveBtn'));
+    l.start();
+    const name = document.getElementById('name').value;
+    const price = document.getElementById('price').value;
+    const duration = document.getElementById('duration').value;
+    const interval = document.getElementById('interval').value;
+    const listingLimit = document.getElementById('listingLimit').value;
+    const description = document.getElementById('description').value;
+    const status = document.getElementById('status').value;
+    const data = { name, price,duration,interval,listingLimit,description,status };
+
+     fetch('/admin/subscription/update/{{id}}', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+        'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.text())
+      .then(result => {
+        l.stop();
+        result = JSON.parse(result);
+        if(result.status=='success'){
+            $('#outMsg').html('<div class="alert alert-success">'+result?.message+'</div>');
+        }
+        if(result.status=='error'){
+            $('#outMsg').html('<div class="alert alert-danger">'+result?.message+'</div>');
+        }
+      })
+      .catch(error => {
+        l.stop();
+        $('#outMsg').html('<div class="alert alert-danger">'+error?.message+'</div>');
+
+      });
+
+    return false;
+}
+</script>
+
+
+
+

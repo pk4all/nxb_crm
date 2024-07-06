@@ -66,7 +66,7 @@ export class UserController {
     @Render('admin/user/permissions')
     async getAllPermission(@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'name',@Query('sortOrder') sortOrder: string = 'asc',@Req() req: Request,@Res() res: Response): Promise<{ permissions:any, pagination:any,layout:string}> {
         try {
-            const {page=1,limit=5} = paginationQuery;
+            const {page=1,limit=20} = paginationQuery;
             const permissions=await this.userService.getAllPermissions(paginationQuery,sortBy,sortOrder);;
             const pagination = await this.userService.getPaginatedPermission(limit, page);
             return {layout:'admin',pagination,permissions};
