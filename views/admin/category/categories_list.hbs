@@ -41,8 +41,6 @@
                                                         <th>Sr. No.</th>
                                                         <th>Name</th>
                                                         <th>Icon</th>
-                                                        <th>Parent Category</th>
-                                                        <th>Type</th>
                                                         <th>Status</th>
                                                         <th>Created</th>
                                                         <th>Action</th>
@@ -61,21 +59,7 @@
                                                             {{else}}
                                                                 NA
                                                             {{/if}}
-                                                            
-                                                        </td>
-                                                        <td>
-                                                            {{#if this.parentName}}
-                                                                {{this.parentName}}
-                                                            {{else}}
-                                                                NA
-                                                            {{/if}}
-                                                        </td>
-                                                        <td>
-                                                            {{#if this.typeName}}
-                                                                {{this.typeName}}
-                                                            {{else}}
-                                                                NA
-                                                            {{/if}}
+                                                           
                                                         </td>
                                                         <td>
                                                             {{#if this.status }}
@@ -88,10 +72,10 @@
                                                         <td>
                                                         <a href="/admin/category/edit/{{this._id}}" class="btn btn-success waves-effect waves-light"><i class="md md-edit"></i></a>
 
-                                                            <form action="/admin/delete-category/{{this._id}}" method="POST" style="display:inline;">
+                                                            {{!-- <form action="/admin/delete-category/{{this._id}}" method="POST" style="display:inline;">
                                                                 <input type="hidden" name="_method" value="DELETE">
                                                                 <button class="btn btn-danger waves-effect waves-light" type="submit"><i class="md md-close"></i></button>
-                                                            </form>
+                                                            </form> --}}
                                                         </td>
                                                     </tr>
                                                    {{/each}}

@@ -123,6 +123,9 @@ export class CategoryController {
             }else{
                 data.status=false;
             }
+            if(data.icon=='empty'){
+                data.icon='';
+            }
             const cat = await this.categoryService.createCategory(data);
             res.json({status:'success',message: 'Category successfully created.',data:cat});
         } catch (error) {
@@ -229,12 +232,12 @@ export class CategoryController {
     }
 
     @UseGuards(SessionGuard)
-    @Get('/listing-types')
-    @Render('admin/category/listing_type_list')
+    @Get('/field-types')
+    @Render('admin/category/field_type_list')
     async listingTypes(@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'createdAt',@Query('sortOrder') sortOrder: string = 'desc',@Req() req: Request): Promise<{ listingTypes:any, pagination:any,layout:string}>{
         try {
-            const {page=1,limit=5} = paginationQuery;
-            const listingTypes = await this.categoryService.findAll(paginationQuery,sortBy,sortOrder);
+            const {page=1,limit=15} = paginationQuery;
+            const listingTypes = await this.categoryService.findAll(paginationQuery,sortBy,sortOrder,limit);
             const pagination = await this.categoryService.getPaginatedListingType(limit, page);
             return { listingTypes,pagination,layout:'admin'};
         } catch (error) {
@@ -245,34 +248,34 @@ export class CategoryController {
     }
 
     @UseGuards(SessionGuard)
-    @Get('/listing-type/add')
-    @Render('admin/category/add_listing_type')
+    @Get('/field-type/add')
+    @Render('admin/category/add_field_type')
     async addListingType(@Req() req: Request, @Res() res: Response){
         return {layout:'admin'}
     }
 
     @UseGuards(SessionGuard)
-    @Post('/listing-type/save')
+    @Post('/field-type/save')
     async saveListingType(@Req() req: Request, @Res() res: Response){
         try {
             var data = req?.body||{};
             data.status=1;
             const lt = await this.categoryService.create(data);
             req.session.flash = {
-                success:'Listing Type add successfully',
+                success:'field Type add successfully',
             };
-            return res.redirect('/admin/listing-types');
+            return res.redirect('/admin/field-types');
         } catch (error) {
             req.session.flash = {
                 error: error.message,
             };
 
-            return res.redirect('/admin/listing-type/add');
+            return res.redirect('/admin/field-type/add');
         }
     }
 
     @UseGuards(SessionGuard)
-    @Post('/delete-listing-type/:id')
+    @Post('/delete-field-type/:id')
     async deleteType(@Param('id') id: string,@Req() req: Request, @Res() res: Response) {
         try {
             const deleted = await this.categoryService.deletedById(id);
@@ -280,17 +283,17 @@ export class CategoryController {
                 req.session.flash = {
                     error:HttpStatus.NOT_FOUND,
                 };
-                return res.redirect('/admin/listing-types');
+                return res.redirect('/admin/field-types');
             }
             req.session.flash = {
                 success:'Listing Type deleted successfully',
             };
-            return res.redirect('/admin/listing-types');
+            return res.redirect('/admin/field-types');
         } catch (error) {
             req.session.flash = {
                 error:error.message,
             };
-            return res.redirect('/admin/listing-types');
+            return res.redirect('/admin/field-types');
         }
     }
 

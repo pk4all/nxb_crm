@@ -34,21 +34,7 @@
                     </div>
                 {{/if}}
                 <form id="catForm" action="/admin/category/save" method="post" enctype='multipart/form-data' onsubmit="return updateData();">
-                    <div class="mb-3">
-                        <label for="example-select" class="form-label">Parent Category</label>
-                        <select class="form-select form-control" id="example-select" name="parentId">
-                            <option value="">Select A Category</option>
-                            {{#if allCats.length }}
-                            {{#each allCats as |ct|}}
-                                {{#if (eq ct._id ../categoryData.parentId)}}
-                                    <option value="{{ct._id}}" selected="">{{ct.name}}</option>
-                                {{else}}
-                                    <option value="{{ct._id}}">{{ct.name}}</option>
-                                {{/if}}
-                            {{/each}}
-                            {{/if}}
-                        </select>
-                    </div>
+                    
                     <div id="slugApp">
                         <div class="mb-3">
                         <label class="form-label">Name</label>
@@ -59,44 +45,16 @@
                         <input name="slug" v-model="slug" autocomplete="name" type="text" id="slug" class="form-control" required="" >
                     </div>
                     </div>
-                    
-
                     <div class="mb-3">
                         <label class="form-label" for="">Icon</label>
                         <div >
                             <button type="button" class="btn btn-secondary" role="iconpicker" name="icon" data-icon="{{categoryData.icon}}" data-iconset="fontawesome5"></button>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="">Image</label>
-                        <div>
-                            {{#if categoryData.image}}
-                            <input id="image" name="image" class="dropify" type="file" data-plugins="dropify" data-default-file="/uploads/category/{{categoryData.image}}">
-                            {{else}}
-                            <input id="image" name="image" class="dropify" type="file" data-plugins="dropify" data-default-file="">
-                            {{/if}}
-                        </div>
-                    </div>
-                    <div class="mb-3">
+                    {{!-- <div class="mb-3">
                         <label class="form-label" for="">Description</label>
                         <textarea id="tinymce-description"  name="description" rows="5" class="form-control tinymce" aria-hidden="true">{{categoryData.description}}</textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" for="">Type</label>
-                        <select class="form-select form-control" id="example-select" name="typeId">
-                            <option value="">Select A Type</option>
-                            {{#if allTypes.length}}
-                                {{#each allTypes}}
-                                    {{#if (eq key ../categoryData.typeId)}}
-                                        <option value="{{key}}" selected="">{{value}}</option>
-                                    {{else}}
-                                        <option value="{{key}}">{{value}}</option>
-                                    {{/if}}
-                                {{/each}}
-                            {{/if}}
-                        </select>
-                    </div>
+                    </div> --}}
                     <div class="mb-3">
                         <label class="form-label" for="">Status</label>
                         <div>
@@ -109,32 +67,7 @@
                         </div>
                     </div>
 
-                    <h4 class="text-dark header-title m-t-0">Custom Fields</h4>
-                    <div class="mb-3">
-                        <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
-                    </div>
-                    <div id="addCat" class="mb-3">
-                        <custom-fields v-bind:survey_1="allFields" v-bind:datas="datas" ></custom-fields>
-                    </div>
-                    <div class="mb-3">
-                        <hr style="border: 1px dashed #EFEFEF;" class="mt-0 mb-1">
-                    </div>
-                    <h4 class="text-dark header-title m-t-0">SEO Tags</h4>
-                    <div class="mb-3">
-                        <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Title</label>
-                        <input name="seo[title]" autocomplete="title" type="text" id="title" class="form-control" value="{{categoryData.seo.title}}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea  name="seo[description]" rows="4" class="form-control" aria-hidden="true">{{categoryData.seo.description}}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Keywords</label>
-                        <textarea  name="seo[keywords]" rows="5" class="form-control" aria-hidden="true">{{categoryData.seo.keywords}}</textarea>
-                    </div>
+                    
                     <div class="mb-3">
                         <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
                     </div>

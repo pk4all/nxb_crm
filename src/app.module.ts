@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from './user/user.module';
+import { UserModule } from './user/user/user.module';
 import { AdminUserModule } from './admin/user/user.module';
 import { FlashMiddleware } from './common/flash.middleware';
 import { CategoryModule } from './admin/category/category.module';
@@ -12,6 +12,7 @@ import { FaqModule } from './admin/faq/faq.module';
 import { SettingModule } from './admin/setting/setting.module';
 import { AdsModule } from './admin/ads/ads.module';
 import { SubscriptionModule } from './admin/subscription/subscription.module';
+import { WebModule } from './web/web.module';
 require('dotenv').config();
 @Module({
   imports: [
@@ -24,7 +25,8 @@ require('dotenv').config();
     FaqModule,
     SettingModule,
     AdsModule,
-    SubscriptionModule
+    SubscriptionModule,
+    WebModule
   ],
   controllers: [AppController],
   providers: [AppService],

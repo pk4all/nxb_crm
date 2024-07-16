@@ -11,6 +11,10 @@ import * as hbs from 'hbs';
 const moment = require('moment');
 const express = require('express');
 require('dotenv').config();
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackConfig from '../webpack.config';
 async function bootstrap() {
   // Register a JSON helper
   
@@ -66,12 +70,6 @@ async function bootstrap() {
       }
     }),
   );
-  // hbs.registerHelper('debug', function (context) {
-  //   return JSON.stringify(context);
-  // });
-  // hbs.registerHelper('incrementedIndex', function (index) {
-  //   return index + 1;
-  // });
   app.setViewEngine('hbs');
   const config = new DocumentBuilder()
     .setTitle('Adolaa APIs')
@@ -120,6 +118,15 @@ async function bootstrap() {
     res.locals.user = req.session.user || null;
     next();
   });
-  await app.listen(3000);
+  if (process.env.NODE_ENV === 'development') {
+    const compiler = webpack(webpackConfig);
+    app.use(
+      webpackDevMiddleware(compiler, {
+        publicPath: webpackConfig.output.publicPath,
+      }),
+    );
+    app.use(webpackHotMiddleware(compiler));
+  }
+  await app.listen(process.env.PORT);
 }
 bootstrap();

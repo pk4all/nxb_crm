@@ -1,0 +1,75 @@
+<div class="content-wrapper">
+
+			<!-- Inner content -->
+			<div class="content-inner">
+
+				<!-- Content area -->
+				<div class="content d-flex justify-content-center align-items-center">
+
+					<!-- Registration form -->
+					<form class="login-form" action="/register" method="post">
+						<div class="card mb-0">
+							<div class="card-body">
+								<div class="text-center mb-3">
+									<div class="d-inline-flex bg-primary bg-opacity-10 text-primary lh-1 rounded-pill p-3 mb-3 mt-1">
+										<i class="ph-user-circle-plus ph-2x"></i>
+									</div>
+									<h5 class="mb-0">Create account</h5>
+									<span class="d-block text-muted">All fields are required</span>
+								</div>
+
+								<div class="text-center text-muted content-divider mb-3">
+									<span class="px-2">Your credentials</span>
+								</div>
+
+								<div class="mb-3">
+									<label class="form-label">Email</label>
+									<div class="form-control-feedback form-control-feedback-start">
+										<input type="email" class="form-control" placeholder="email@email.com" name="email" required="">
+										<div class="form-control-feedback-icon">
+											<i class="ph-user-circle text-muted"></i>
+										</div>
+									</div>
+									{{!-- <div class="form-text text-danger"><i class="ph-x-circle me-1"></i> This username is already taken</div> --}}
+								</div>
+
+								<div class="mb-3">
+									<label class="form-label">Password</label>
+									<div class="form-control-feedback form-control-feedback-start">
+										<input type="password" class="form-control" placeholder="•••••••••••" name="password" required="">
+										<div class="form-control-feedback-icon">
+											<i class="ph-lock text-muted"></i>
+										</div>
+									</div>
+								</div>
+
+								<div class="text-center text-muted content-divider mb-3">
+									<span class="px-2">Additions</span>
+								</div>
+
+								<div class="mb-3">
+									<label class="form-check mb-2">
+										<input type="checkbox" name="subscribeNewsletter" class="form-check-input" checked="">
+										<span class="form-check-label">Subscribe to monthly newsletter</span>
+									</label>
+
+									<label class="form-check">
+										<input type="checkbox" name="remember" class="form-check-input" checked="">
+										<span class="form-check-label">Accept <a href="#">&nbsp;terms of service</a></span>
+									</label>
+								</div>
+
+								<button type="submit" class="btn btn-teal w-100">Register</button>
+							</div>
+						</div>
+					</form>
+					<!-- /registration form -->
+
+				</div>
+				<!-- /content area -->
+
+
+
+			</div>
+			<!-- /inner content -->
+	</div>

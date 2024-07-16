@@ -1,0 +1,75 @@
+    <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+                <div class="content">
+                    <div class="container-fluid">
+                        <!-- Page-Title -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="page-title">Add Field Type</h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Adolaa</a></li>
+                                    <li class="breadcrumb-item active">Add Field Type</li>
+                                </ol>
+                            </div>
+                        </div>
+                    <div class="row">
+                            <div class="col-md-6">
+                                <a href="/admin/field-types" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-right" ><i class="md md-list"></i> All Field Types</a>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-12 col-md-9">
+                                <div class="card-box">
+                                    <h4 class="text-dark header-title m-t-0"> Add Field Type</h4>
+                                    {{#if flash.error}}
+                                        <div class="alert alert-danger">
+                                        {{{flash.error}}}
+                                        </div>
+                                    {{/if}}
+                                    {{#if flash.success}}
+                                        <div class="alert alert-success">
+                                        {{{flash.success}}}
+                                        </div>
+                                    {{/if}}
+                                    <form action="/admin/field-type/save" method="post">
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input name="name" autocomplete="name" type="text" id="name" class="form-control" required="">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Type</label>
+                                            <select name="type" class="form-select form-control">
+                                                <option value="text">Text</option>
+                                                <option value="email">Email</option>
+                                                <option value="url">URL</option>
+                                                <option value="number">Number</option>
+                                                <option value="file">File</option>
+                                                <option value="files">Files</option>
+                                                <option value="textarea">Textarea</option>
+                                                <option value="checkbox">Checkbox</option>
+                                                <option value="select">Select Box</option>
+                                                <option value="radio">Radio</option>
+                                                <option value="rating">Rating</option>
+                                                <option value="date">Date</option>
+                                                <option value="date_time">Date Time</option>
+                                                <option value="date_range">Date Range</option>
+                                                <option value="video">Video (Youtube, Vimeo)</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="submit" class="waves-effect waves-light btn btn-success">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+               
+
+

@@ -21,7 +21,7 @@ export class SessionGuard implements CanActivate {
       //const notIn = excludeUrls.indexOf(currPath) == -1;
      // console.log(currPath,notIn,'index');
      //console.log(userRolePermissions.length,'userRolePermissions');
-      if(userRolePermissions.length>0){
+      if(userRolePermissions && userRolePermissions.length>0){
         const userRolePermissionsWithAllowedUrls = [...userRolePermissions,...excludeUrls];
         const currPath = request.route.path;
         //console.log(userRolePermissionsWithAllowedUrls,currPath);

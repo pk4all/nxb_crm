@@ -2,7 +2,7 @@ import { Injectable,ConflictException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { ListingType } from 'src/schemas/listingtype.schema';
+import { FieldType } from 'src/schemas/fieldtype.schema';
 import { CreateListingTypeDto } from 'src/dto/create-listingtype.dto';
 import { CreateCategoryDto } from 'src/dto/create-category.dto';
 import { Category } from 'src/schemas/category.schema';
@@ -18,8 +18,8 @@ const types = {
 @Injectable()
 export class CategoryService {
     constructor(
-        @InjectModel(ListingType.name) private listingTypeModel: Model<ListingType>,
-        @InjectModel(Category.name) private categoryModel: Model<ListingType>
+        @InjectModel(FieldType.name) private listingTypeModel: Model<FieldType>,
+        @InjectModel(Category.name) private categoryModel: Model<Category>
       ) {
         
       }
@@ -34,8 +34,8 @@ export class CategoryService {
         } 
     }
 
-    async findAll(paginationQuery: PaginationQueryDto,sortBy: string, sortOrder: string): Promise<ListingType[]> {
-        const { limit, search,page=1} = paginationQuery;
+    async findAll(paginationQuery: PaginationQueryDto,sortBy: string, sortOrder: string,limit): Promise<FieldType[]> {
+        const {search,page=1} = paginationQuery;
         const sortCriteria:any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
         const query = search ? { title: new RegExp(search, 'i') } : {};
         const l = limit||5;
@@ -50,7 +50,7 @@ export class CategoryService {
           .exec();
     }
 
-    async findAllCates(paginationQuery: PaginationQueryDto,sortBy: string, sortOrder: string): Promise<ListingType[]> {
+    async findAllCates(paginationQuery: PaginationQueryDto,sortBy: string, sortOrder: string): Promise<Category[]> {
         const { limit, search,page=1} = paginationQuery;
         const sortCriteria:any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
         const query = search ? { title: new RegExp(search, 'i') } : {};
@@ -103,7 +103,7 @@ export class CategoryService {
     }
 
     
-    async deletedById(id: string): Promise<ListingType> {
+    async deletedById(id: string): Promise<FieldType> {
         return this.listingTypeModel.findByIdAndDelete(id).exec();
     }
     
@@ -152,7 +152,7 @@ export class CategoryService {
           return d;
 
     }
-    async deletedCategoryById(id: string): Promise<ListingType> {
+    async deletedCategoryById(id: string): Promise<Category> {
         return this.categoryModel.findByIdAndDelete(id).exec();
     }
 }

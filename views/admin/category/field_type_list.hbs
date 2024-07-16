@@ -1,0 +1,93 @@
+    <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            
+                <div class="content">
+                    <div class="container-fluid">
+                        <!-- Page-Title -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="page-title">Field Types List</h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Adolaa</a></li>
+                                    <li class="breadcrumb-item active">Field Types</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="/admin/field-type/add" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-right" ><i class="md md-add"></i> Add New</a>
+                            </div>
+                        </div>
+                       <div class="row justify-content-md-center">
+                            <div class="col-sm-12 col-md-9">
+                                <div class="card-box">
+                                    {{#if flash.error}}
+                                        <div class="alert alert-danger">
+                                        {{{flash.error}}}
+                                        </div>
+                                    {{/if}}
+                                    {{#if flash.success}}
+                                        <div class="alert alert-success">
+                                        {{{flash.success}}}
+                                        </div>
+                                    {{/if}}
+                                        <h4 class="text-dark header-title m-t-0">Field Types</h4>
+                                        <div class="table-responsive">
+                                                <table class="table table-actions-bar">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Sr. No.</th>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Status</th>
+                                                        {{!-- <th>Action</th> --}}
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {{#if listingTypes.length }}
+                                                    {{#each listingTypes }}
+                                                     
+                                                   <tr>
+                                                        <td>{{incrementedIndex @index}}</td>
+                                                        <td>{{{this.name}}}</td>
+                                                        <td>{{this.type}}</td>
+                                                        <td>
+                                                            {{#if this.status }}
+                                                                <span class="label label-success">Active</span>
+                                                            {{else}}
+                                                                <span class="label label-danger">In-Active</span>
+                                                            {{/if}}
+                                                        </td>
+                                                        <td>
+                                                            {{!-- <a href="#" class="table-action-btn"><i class="md md-edit"></i></a> --}}
+                                                            {{!-- <form action="/admin/delete-listing-type/{{this._id}}" method="POST" style="display:inline;">
+                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                <button class="btn btn-danger waves-effect waves-light" type="submit"><i class="md md-close"></i></button>
+                                                            </form> --}}
+                                                        </td>
+                                                    </tr>
+                                                   {{/each}}
+
+                                                   {{else}}
+                                                   <h4 class="text-dark header-title m-t-0">No Listing Types</h4>
+                                                   {{/if}}
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                        {{> paging pagination=pagination}}
+
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- end row -->
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+               
+<script>
+    const listingTypes = {{{json listingTypes}}};
+    console.log('Articles:', listingTypes);
+  </script>
+

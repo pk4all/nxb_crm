@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryController } from './category.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ListingType,ListingTypeSchema } from 'src/schemas/listingtype.schema';
+import { FieldType,FieldTypeSchema } from 'src/schemas/fieldtype.schema';
 import { Category,CategorySchema } from 'src/schemas/category.schema';
 @Module({
   imports:[MongooseModule.forFeatureAsync([{
-    name:ListingType.name,
+    name:FieldType.name,
     useFactory: () => {
-    const schema = ListingTypeSchema;
+    const schema = FieldTypeSchema;
     schema.pre('save', async function () {
       if (this.name && this.isModified('name')) {
         this.slug = this.name.toLowerCase()

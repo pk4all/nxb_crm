@@ -5,10 +5,12 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  @Render('index')
-  getHello(){
-    return {message:this.appService.getHello()};
-  }
+  
 
+  @Get('/survey')
+  @Render('survey')
+  getSurvey(){
+    return {message:this.appService.getHello(),layout:'web'};
+  }
+  
 }
