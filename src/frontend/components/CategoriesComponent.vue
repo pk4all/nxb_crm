@@ -11,7 +11,7 @@
   <script>
   import { ref, onMounted ,watch} from 'vue';
   export default {
-    name: 'Categories',
+    name: 'CategoriesComponent',
     props: ['modelValue'],
     setup(props, { emit }) {
       const data = ref(null);

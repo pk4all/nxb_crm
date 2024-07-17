@@ -24,15 +24,18 @@
                     <div class="col-sm-4">
                       <CategoriesComponent v-model="form.type" />
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                       <div class="mb-3">
                         <label class="form-label">Description:</label>
                         <textarea id="sescription" class="form-control" name="description" v-model="form.description" placeholder="Form Description"></textarea>
 										  </div>
                     </div>
                     <h6>Form Fields</h6>
-                    <div class="fields" v-for="(field, index) in form.fields" :key="index">
-                      <FieldComponent v-model="field.value" :index="index" @remove="removeField(index)" />
+                    <div class="fields" v-for="(field, index) in fieldSets" :key="index">
+                      <FieldComponent :modelValue="field" :index="index" @remove="removeField(index)" />
+                    </div>
+                    <div class="mb-3">
+                        <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
                     </div>
                     <div class="mb-3">
                       <button @click="addField" type="button" class="btn btn-primary btn-icon rounded-pill">
@@ -61,21 +64,20 @@ export default {
     FieldComponent
   },
   setup() {
-    const fields = ref([]);
-    const form=ref({status:false,title:'Test',description:'Test description',type:'66966a030016436b114a41fa',fields:fields});
+    const fieldSets = ref([{ }]);
+    const form=ref({status:false,title:'',description:'',type:'66966a030016436b114a41fa',fields:fieldSets});
     const addField = ()=>{
-      fields.value.push({});
-      form.value.fields=fields;
-      console.log(form);
+      fieldSets.value.push({  });
+      form.value.fields=fieldSets;
     };
     const removeField = (index) => {
-      fields.value.splice(index, 1);
-      form.value.fields=fields;
+      fieldSets.value.splice(index, 1);
+      form.value.fieldSets=fieldSets;
     };
     return {
       addField,
       form,
-      fields,
+      fieldSets,
       removeField
     };
   }
