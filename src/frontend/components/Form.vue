@@ -1,5 +1,6 @@
 <template>
   <div class="row">
+    {{ form }}
 					<div class="col-xl-12">
 						<div  class="card">
               <form id="form" action="" method="post" enctype="multipart/form-data">
@@ -27,12 +28,23 @@
                     <div class="col-sm-6">
                       <div class="mb-3">
                         <label class="form-label">Description:</label>
-                        <textarea id="sescription" class="form-control" name="description" v-model="form.description" placeholder="Form Description"></textarea>
+                        <textarea id="description" class="form-control" name="description" v-model="form.description" placeholder="Form Description"></textarea>
 										  </div>
                     </div>
+                    <div class="col-sm-6">
+                      <div class="img">
+                        <label class="form-label full-width" for="">Profile Image:</label>
+                        <input class="form-control" name="profileImage" type="file">
+                      </div>
+                      <div class="img">
+                        <label class="form-label full-width" for="">Cover Image:</label>
+                        <input class="form-control" name="coverImage" type="file">
+                      </div>
+                    </div>
+                   
                     <h6>Form Fields</h6>
                     <div class="fields" v-for="(field, index) in fieldSets" :key="index">
-                      <FieldComponent :modelValue="field" :index="index" @remove="removeField(index)" />
+                      <FieldComponent :modelValue="field" :index="index" @remove="removeField(index)" @update:modelValue="updateFieldSet(index, $event)" />
                     </div>
                     <div class="mb-3">
                         <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
@@ -64,11 +76,18 @@ export default {
     FieldComponent
   },
   setup() {
-    const fieldSets = ref([{ }]);
-    const form=ref({status:false,title:'',description:'',type:'66966a030016436b114a41fa',fields:fieldSets});
-    const addField = ()=>{
-      fieldSets.value.push({  });
+    const fieldSets = ref([{ title: '', type: 'text',options:[] }]);
+    const form=ref({status:true,title:'',description:'',type:'66966a030016436b114a41fa',fields:fieldSets});
+    
+    const updateFieldSet = (index,newValue)=>{
+      fieldSets.value[index]=newValue;
       form.value.fields=fieldSets;
+    }
+    
+    const addField = ()=>{
+      fieldSets.value.push({ title: '', type: 'text',options:[] });
+      form.value.fields=fieldSets;
+      //console.log(form,'all data');
     };
     const removeField = (index) => {
       fieldSets.value.splice(index, 1);
@@ -78,7 +97,8 @@ export default {
       addField,
       form,
       fieldSets,
-      removeField
+      removeField,
+      updateFieldSet
     };
   }
 

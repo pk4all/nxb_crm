@@ -35,7 +35,6 @@
       const fieldValue = ref(props.modelValue);
       const updateValue = () => {
         emit('update:modelValue', fieldValue.value);
-        console.log('category Value',fieldValue.value);
       };
 
       watch(() => props.modelValue, (newValue) => {

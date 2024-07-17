@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="col-sm-4">
-      <FieldTypesComponent :modelValue="fieldsData.type" @update:modelValue="updateFieldSet(index, $event)" />
+      <FieldTypesComponent v-model="fieldsData.type" @update:modelValue="updateFieldSet(index, $event)" />
     </div>
     <div class="col-sm-2">
       <div class="mb-0 mt-4">
@@ -32,7 +32,7 @@
       </div>  
   </div>
   <div class="mb-3" v-if="ratingState">
-     <RatingComponent />
+     <RatingComponent :modelValue="rating" :index="index" @update:modelValue="updateRatingSet(index, $event)"/>
   </div>
 
 </template>
@@ -63,16 +63,18 @@
       const optState = ref(false);
       const ratingState = ref(false);
       const options = ref([]);
+      const rating = ref({type:'rating',value:'2',icon:'ph-star',color:'#f57900'});
       const updateFieldSet = (index, newValue) => {
-        fieldsData.value[index].type = newValue;
+        emit('update:modelValue', fieldsData.value);
+        fieldsData.value.type = newValue;
         if(newValue == 'checkbox' || newValue == 'select'||newValue == 'radio'){
-          options.value = [{}];
+          options.value = [{type:'option',value:''}];
           fieldsData.value.options=options;
           optState.value=true;
           ratingState.value = false;
         }else if(newValue == 'rating'){
-          options.value =[];
-          fieldsData.value.options=options;
+          //rating.value =[];
+          fieldsData.value.options=[rating];
           optState.value=false;
           ratingState.value = true;
         }else{
@@ -84,18 +86,27 @@
       };
 
       const updateOptionSet = (index, newValue)=>{
+        emit('update:modelValue', fieldsData.value);
         options.value[index]=newValue;
         fieldsData.value.options=options;
       };
       
       const addOption = ()=>{
-        options.value.push({});
+        options.value.push({type:'option',value:''});
         fieldsData.value.options=options;
       };
       const removeOption = (index) => {
         options.value.splice(index, 1);
         fieldsData.value.options=options;
       };
+
+      const updateRatingSet = (index,newValue)=>{
+        emit('update:modelValue', fieldsData.value);
+        rating.value=newValue;
+        fieldsData.value.options=[rating];
+        //console.log('rating data',newValue,index);
+        //console.log('rating fields Data',fieldsData,index);
+      }
       return {
         fieldsData,
         updateValue,
@@ -105,7 +116,9 @@
         ratingState,
         addOption,
         removeOption,
-        options
+        options,
+        updateRatingSet,
+        rating
       };
     },
     components: {

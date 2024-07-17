@@ -3,13 +3,14 @@
     <div class="mb-3" v-else-if="error">Error: {{ error }}</div>
     <div class="mb-3" v-else >
         <label class="form-label">Type:</label>
-        <select class="form-control" v-model="fieldValue" @change="updateValue">
+        <select class="form-control" v-model="fieldValue" @change="updateValue" >
             <option v-for="item in data" :value="item.type">{{item.name }}</option>
         </select>
 	</div>
   </template>
   <script>
   import { ref, onMounted,watch } from 'vue';
+  import { getFromCache, setInCache } from '../utils/cache';
   export default {
     name: 'FieldTypesComponent',
     props: ['modelValue'],
@@ -17,15 +18,22 @@
       const data = ref(null);
       const loading = ref(true);
       const error = ref(null);
-  
       onMounted(async () => {
         try {
-          const response = await fetch('/user/form-fields');
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
+          const cacheKey = 'fields_type';
+          const getCatsValue = getFromCache(cacheKey);
+          if(getCatsValue){
+            data.value = getCatsValue;
+          }else{
+            const response = await fetch('/user/form-fields');
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const json = await response.json();
+            data.value = json.data;
+            setInCache(cacheKey, json.data);
           }
-          const json = await response.json();
-          data.value = json.data;
+         
         } catch (err) {
             error.value = err.message;
         } finally {
@@ -33,10 +41,9 @@
         }
       });
       const fieldValue = ref(props.modelValue);
-     // console.log('pre value for field type',fieldValue.value);
+      
       const updateValue = () => {
         emit('update:modelValue', fieldValue.value);
-        //console.log('field type Value',fieldValue.value);
       };
       watch(() => props.modelValue, (newValue) => {
         fieldValue.value = newValue;

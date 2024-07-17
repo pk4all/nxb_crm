@@ -30,7 +30,7 @@ import { ref, onMounted, watch } from 'vue';
       const error = ref(null);
   
       onMounted(async () => {
-        
+        updateValue();
       });
       const fieldValue = ref(props.modelValue);
       

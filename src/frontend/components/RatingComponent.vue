@@ -2,7 +2,7 @@
     <div  class="row mb-2">
     <div class="col-sm-3">
       <label class="form-label" for="">Scale:</label>
-      <select v-model="fieldValue.value" class="form-select" name="scale">
+      <select v-model="fieldValue.value" class="form-select" name="scale" @change="updateValue">
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
@@ -16,7 +16,7 @@
     </div>
     <div class="col-sm-3">
       <label class="form-label" for=""> Shape: </label>
-      <select v-model="fieldValue.icon" class="form-select"  name="shape">
+      <select v-model="fieldValue.icon" class="form-select"  name="shape" @change="updateValue">
         <option value="ph-star">Star</option>
         <option value="ph-smiley-wink">Smiley</option>
         <option value="ph-heart-straight">Heart</option>
@@ -25,7 +25,7 @@
     </div>
     <div class="col-sm-2">
       <label class="form-label full-width">Color:</label>
-      <input v-model="fieldValue.color" class="color" type="color" name="color" >
+      <input v-model="fieldValue.color" @input="updateValue" class="color" type="color" name="color" >
     </div>
     <div class="col-sm-2">
       <label class="mt-3" :style="{color:fieldValue.color}"><i :class="fieldValue.icon + ' ph-2x'" :color="fieldValue.color" ></i></label>
@@ -39,7 +39,7 @@ import { ref, onMounted, watch } from 'vue';
     props: {
       modelValue:{
         type: Object,
-        default: () => ({type:'rating',value:'',icon:'',color:''})
+        default: () => ({type:'rating',value:'2',icon:'ph-star',color:'#f57900'})
       },
       index:Number
     },
@@ -49,10 +49,9 @@ import { ref, onMounted, watch } from 'vue';
       const error = ref(null);
   
       onMounted(async () => {
-        
+        updateValue();
       });
       const fieldValue = ref(props.modelValue);
-      
       const updateValue = () => {
         emit('update:modelValue', fieldValue.value);
       };
