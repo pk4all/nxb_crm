@@ -20,7 +20,7 @@
   
       onMounted(async () => {
         try {
-          const response = await fetch('/user/form-categories');
+          const response = await fetch('/form/form-categories');
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }

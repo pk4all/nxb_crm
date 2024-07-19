@@ -6,7 +6,7 @@ module.exports = {
   mode: 'development',
   entry: {
     form: './src/frontend/form.js',
-    //about: './src/frontend/about.js'
+    formList: './src/frontend/form_list.js'
   },
   output: {
     path: path.resolve(__dirname, 'public/vue'),

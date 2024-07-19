@@ -1,47 +1,42 @@
-import { Injectable,OnModuleInit } from '@nestjs/common';
+import { Injectable,OnModuleInit,ConflictException,UnauthorizedException,BadRequestException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../../schemas/user.schema';
 import { CreateUserDto } from '../../dto/create-user.dto';
-import { Category } from 'src/schemas/category.schema';
-import { FieldType } from 'src/schemas/fieldtype.schema';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
     constructor(
         @InjectModel(User.name) private userModel: Model<User>,
-        @InjectModel(Category.name) private categoryModel: Model<Category>,
-        @InjectModel(FieldType.name) private fieldTypeModel: Model<FieldType>
-      ) {
-        
-      }
+      ) {}
 
     async create(jsonData: any) {
-        const createUserDto = plainToInstance(CreateUserDto, jsonData);
-        const createdUser = new this.userModel(createUserDto);
-        return await createdUser.save();
+        try {
+            return await this.userModel.create(jsonData);
+          } catch (error) {
+            throw new BadRequestException(error?.message||'Data not saved');
+          }
     }
 
-
-    async getAllCategories(){
-        const sortCriteria:any = { ['name']: 1 };
-        return this.categoryModel
-          .find({status:true},'name _id')
-          .sort(sortCriteria)
-          .lean()
-          .exec();
+    async findLogin(email: string): Promise<User | undefined> {
+      return this.userModel.findOne({email}).lean();
     }
 
-
-    async getAllFields(){
-        const sortCriteria:any ={};
-        return this.fieldTypeModel
-          .find({status:true},'name type')
-          .sort(sortCriteria)
-          .lean()
-          .exec();
-        
+    async signIn(username: string, pass: string) {
+      try {
+        const user = await this.findLogin(username);
+      
+        const isMatch = await bcrypt.compare(pass, user?.password);
+        if (!isMatch) {
+          //return {message:'Password is not valid',status:'error'};
+          throw new BadRequestException('User name or password is not valid', { cause: new Error(), description: 'Invalid Credentials' });
+        }
+        return {user:user,status:'success'};
+      } catch (error) {
+        //return {message:'User name or password is not valid',status:'error'};
+        throw new BadRequestException(error.message, { cause: new Error(), description: 'Invalid Credentials, please retry.' });
+      }
     }
-
     
 }

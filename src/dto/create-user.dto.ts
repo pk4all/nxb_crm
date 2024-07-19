@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { IsEmail, IsString, IsNotEmpty,IsNumber } from 'class-validator';
+import { IsEmail, IsString, IsNotEmpty,IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateUserDto {
     @IsString()
@@ -17,4 +17,8 @@ export class CreateUserDto {
     @IsString()
     password: string;
     
+    @IsBoolean()
+    newslatterSubscribe:boolean;
+    @IsBoolean()
+    tnc:boolean;
 }

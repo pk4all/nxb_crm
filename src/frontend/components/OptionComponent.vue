@@ -1,8 +1,8 @@
 <template>
     <div  class="row mb-2">
     <div class="col-sm-4">
-      <label class="form-label" for="">Option {{ index+1 }} Value:</label>
-      <input v-model="fieldValue.value" @input="updateValue" type="text" name="title" class="form-control" placeholder="Option title" >
+      <label class="form-label" for="">Option {{ index+1 }} Value:<span class="text-danger">*</span></label>
+      <input v-model="fieldValue.value" @input="updateValue" type="text" name="title" class="form-control" placeholder="Option title" required >
     </div>
     <div class="col-sm-1">
       <div class="mb-0 mt-4">

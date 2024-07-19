@@ -4,16 +4,20 @@
   </div>
   <span class="badge bg-primary align-self-center rounded-pill ms-auto">{{index+1}}</span>
   <div class="row">
-    <div class="col-sm-6" >
+    <div class="col-sm-5">
       <div class="mb-3">
-        <label class="form-label">Field Title:</label>
-        <input v-model="fieldsData.title" @input="updateValue" type="text" name="title" class="form-control" placeholder="Field title">
+        <label class="form-label">Field Title:<span class="text-danger">*</span></label>
+        <textarea v-model="fieldsData.title" @input="updateValue" type="text" name="title" class="form-control" placeholder="Field title" required> </textarea>
       </div>
     </div>
     <div class="col-sm-4">
       <FieldTypesComponent v-model="fieldsData.type" @update:modelValue="updateFieldSet(index, $event)" />
     </div>
     <div class="col-sm-2">
+      <label class="form-label full-width">Required:</label>
+      <input v-model="fieldsData.required" @change="updateValue" type="checkbox" name="required" >
+    </div>
+    <div class="col-sm-1">
       <div class="mb-0 mt-4">
           <button @click="$emit('remove')" type="button" class="btn btn-danger btn-icon rounded-pill">
               <i class="ph-minus"></i>
@@ -46,7 +50,7 @@
     props: {
         modelValue: {
           type: Object,
-          default: () => ({ title: '', type: 'text',options:[] })
+          default: () => ({ title: '', type: 'text',required:false,options:[] })
         },
         index: Number
     },
@@ -74,7 +78,7 @@
           ratingState.value = false;
         }else if(newValue == 'rating'){
           //rating.value =[];
-          fieldsData.value.options=[rating];
+          fieldsData.value.options=rating;
           optState.value=false;
           ratingState.value = true;
         }else{
@@ -101,11 +105,11 @@
       };
 
       const updateRatingSet = (index,newValue)=>{
-        emit('update:modelValue', fieldsData.value);
         rating.value=newValue;
-        fieldsData.value.options=[rating];
-        //console.log('rating data',newValue,index);
-        //console.log('rating fields Data',fieldsData,index);
+        fieldsData.value.options=rating;
+        emit('update:modelValue', fieldsData.value);
+        // console.log('rating value data',newValue,index,rating);
+        // console.log('rating fields Data',fieldsData,index);
       }
       return {
         fieldsData,

@@ -14,7 +14,7 @@ import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
 export class AdsController {
   constructor(private readonly adsService: AdsService) {}
 
-  @Get('/ads')
+    @Get('/ads')
     @Render('admin/ads/ads')
     async allpages(@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'createdAt',@Query('sortOrder') sortOrder: string = 'desc',@Req() req: Request): Promise<{ ads:any, pagination:any,layout:string}> {
       try {

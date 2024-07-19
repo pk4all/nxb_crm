@@ -29,4 +29,11 @@ export class WebController {
     async forgotPassword(){
         return {layout:'user_login'}
     }
+
+    @Get('/content/:type/:id')
+    @Render('frontend_form')
+    async frontForm(){
+
+        return {layout:'web'}
+    }
 }

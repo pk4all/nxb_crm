@@ -25,7 +25,7 @@
           if(getCatsValue){
             data.value = getCatsValue;
           }else{
-            const response = await fetch('/user/form-fields');
+            const response = await fetch('/form/form-fields');
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }

@@ -15,6 +15,7 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackConfig from '../webpack.config';
+import { MongoExceptionFilter } from './filters/mongo-exception.filter';
 async function bootstrap() {
   // Register a JSON helper
   
@@ -127,6 +128,7 @@ async function bootstrap() {
     );
     app.use(webpackHotMiddleware(compiler));
   }
+  //app.useGlobalFilters(new MongoExceptionFilter());
   await app.listen(process.env.PORT);
 }
 bootstrap();

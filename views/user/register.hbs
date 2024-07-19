@@ -2,12 +2,10 @@
 
 			<!-- Inner content -->
 			<div class="content-inner">
-
 				<!-- Content area -->
 				<div class="content d-flex justify-content-center align-items-center">
-
 					<!-- Registration form -->
-					<form class="login-form" action="/register" method="post">
+					<form class="login-form" action="/user/register" method="post">
 						<div class="card mb-0">
 							<div class="card-body">
 								<div class="text-center mb-3">
@@ -21,7 +19,26 @@
 								<div class="text-center text-muted content-divider mb-3">
 									<span class="px-2">Your credentials</span>
 								</div>
-
+								{{#if flash.error}}
+									<div class="alert alert-danger">
+									{{{flash.error}}}
+									</div>
+								{{/if}}
+								{{#if flash.success}}
+									<div class="alert alert-success">
+									{{{flash.success}}}
+									</div>
+								{{/if}}
+								<div class="mb-3">
+									<label class="form-label">Full Name</label>
+									<div class="form-control-feedback form-control-feedback-start">
+										<input type="text" class="form-control" placeholder="Enter your Name" name="name" required="">
+										<div class="form-control-feedback-icon">
+											<i class="ph-user-circle text-muted"></i>
+										</div>
+									</div>
+									{{!-- <div class="form-text text-danger"><i class="ph-x-circle me-1"></i> This email is already taken</div> --}}
+								</div>
 								<div class="mb-3">
 									<label class="form-label">Email</label>
 									<div class="form-control-feedback form-control-feedback-start">
@@ -30,9 +47,8 @@
 											<i class="ph-user-circle text-muted"></i>
 										</div>
 									</div>
-									{{!-- <div class="form-text text-danger"><i class="ph-x-circle me-1"></i> This username is already taken</div> --}}
+									{{!-- <div class="form-text text-danger"><i class="ph-x-circle me-1"></i> This email is already taken</div> --}}
 								</div>
-
 								<div class="mb-3">
 									<label class="form-label">Password</label>
 									<div class="form-control-feedback form-control-feedback-start">
@@ -46,15 +62,14 @@
 								<div class="text-center text-muted content-divider mb-3">
 									<span class="px-2">Additions</span>
 								</div>
-
 								<div class="mb-3">
 									<label class="form-check mb-2">
-										<input type="checkbox" name="subscribeNewsletter" class="form-check-input" checked="">
+										<input type="checkbox" name="newslatterSubscribe" class="form-check-input" checked="" value="true">
 										<span class="form-check-label">Subscribe to monthly newsletter</span>
 									</label>
 
 									<label class="form-check">
-										<input type="checkbox" name="remember" class="form-check-input" checked="">
+										<input name="tnc" type="checkbox" name="remember" class="form-check-input" checked="" required="" value="true">
 										<span class="form-check-label">Accept <a href="#">&nbsp;terms of service</a></span>
 									</label>
 								</div>

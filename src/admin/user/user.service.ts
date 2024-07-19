@@ -25,7 +25,7 @@ export class UserService {
             const isMatch = await bcrypt.compare(pass, user?.password);
             //return isMatch;
             if (!isMatch) {
-              //return {message:'Password is not valid',status:'error'};
+              return {message:'Password is not valid',status:'error'};
              // throw new BadRequestException('User name or password is not valid', { cause: new Error(), description: 'Invalid Credentials or worng password.' });
             }
             //delete user['password'];

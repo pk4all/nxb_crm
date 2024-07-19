@@ -13,6 +13,7 @@ import { SettingModule } from './admin/setting/setting.module';
 import { AdsModule } from './admin/ads/ads.module';
 import { SubscriptionModule } from './admin/subscription/subscription.module';
 import { WebModule } from './web/web.module';
+import { FormModule } from './user/form/form.module';
 require('dotenv').config();
 @Module({
   imports: [
@@ -26,7 +27,8 @@ require('dotenv').config();
     SettingModule,
     AdsModule,
     SubscriptionModule,
-    WebModule
+    WebModule,
+    FormModule
   ],
   controllers: [AppController],
   providers: [AppService],

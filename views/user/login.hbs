@@ -8,13 +8,23 @@
 				<div class="content d-flex justify-content-center align-items-center">
 
 					<!-- Login form -->
-					<form class="login-form" action="/login" method="post">
+					<form class="login-form" action="/user/login" method="post">
 						<div class="card mb-0">
 							<div class="card-body">
 								<div class="text-center mb-3">
 									<div class="d-inline-flex bg-primary bg-opacity-10 text-primary lh-1 rounded-pill p-3 mb-3 mt-1">
 										<i class="ph-user-circle ph-2x"></i>
 									</div>
+									{{#if flash.error}}
+									<div class="alert alert-danger">
+									{{{flash.error}}}
+									</div>
+									{{/if}}
+									{{#if flash.success}}
+										<div class="alert alert-success">
+										{{{flash.success}}}
+										</div>
+									{{/if}}
 									<h5 class="mb-0">Login to your account</h5>
 									<span class="d-block text-muted">Enter your credentials below</span>
 								</div>
