@@ -30,7 +30,7 @@
 										  </div>
                     </div>
                     <div class="col-sm-4">
-                      <CategoriesComponent v-model="form.type" />
+                      <CategoriesComponent v-model="form.category" />
                     </div>
                     <div class="col-sm-6">
                       <div class="mb-3">
@@ -99,17 +99,16 @@ export default {
     };
   },
   methods:{
-    // async saveForm(){
-      
-    // }
+    
   },
   components: {
     CategoriesComponent,
     FieldComponent
   },
   setup() {
+
     const fieldSets = ref([{ title: '', type: 'text',required:false,options:[] }]);
-    const form=ref({status:true,title:'',description:'',profileImage:'',coverImage:'',type:'66966a030016436b114a41fa',visibility:'public',fields:fieldSets});
+    const form=ref({status:true,title:'',description:'',profileImage:'',coverImage:'',category:'66966a030016436b114a41fa',visibility:'public',fields:fieldSets});
     
     const updateFieldSet = (index,newValue)=>{
       fieldSets.value[index]=newValue;
@@ -234,7 +233,7 @@ export default {
 
       const resetForm = ()=>{
         formRef.value.reset();
-        form.value=ref({status:true,title:'',description:'',profileImage:'',coverImage:'',type:'66966a030016436b114a41fa',visibility:'public',fields:[{ title: '', type: 'text',required:false,options:[] }]});
+        form.value=ref({status:true,title:'',description:'',profileImage:'',coverImage:'',category:'66966a030016436b114a41fa',visibility:'public',fields:[{ title: '', type: 'text',required:false,options:[] }]});
         fieldSets.value=[{ title: '', type: 'text',required:false,options:[] }];
       }
       

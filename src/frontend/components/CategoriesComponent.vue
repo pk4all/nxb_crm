@@ -2,7 +2,7 @@
     <div class="mb-3" v-if="loading"><i class="ph-spinner spinner ph-2x"></i></div>
     <div class="mb-3" v-else-if="error">Error: {{ error }}</div>
     <div class="mb-3" v-else >
-        <label class="form-label">Type:</label>
+        <label class="form-label">Category:</label>
         <select class="form-control" v-model="fieldValue" @change="updateValue">
             <option v-for="item in data" :value="item._id">{{item.name }}</option>
         </select>

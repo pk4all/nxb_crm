@@ -1,4 +1,4 @@
-import { Injectable,BadRequestException } from '@nestjs/common';
+import { Injectable,BadRequestException,ConflictException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category } from 'src/schemas/category.schema';
@@ -46,13 +46,19 @@ export class FormService {
       const query = search ? { title: new RegExp(search, 'i') } : {};
       const l = limit||5;
       const ofs = ((page-1)*l);
-      return this.formModel
+      try {
+        return this.formModel
         .find(query)
         .skip(ofs)
         .limit(l)
         .sort(sortCriteria)
+        .populate('category')
         .lean()
         .exec();
+      } catch (error) {
+        throw new BadRequestException(error?.message||'NO data');
+      }
+      
     }
   
     async getPaginatedForms(limit: number, page: number): Promise<any> {
@@ -68,5 +74,21 @@ export class FormService {
             pages: Array.from({ length: totalPages }, (_, i) => i + 1)
           };
           return paginationData;
+    }
+
+    async editForm(jsonData:any,id:string){
+      try {
+          return await this.formModel.findByIdAndUpdate(id,jsonData);
+      } catch (error) {
+          throw new ConflictException(error?.message||'Data not saved');
+      }  
+    }
+    async getForm(id){
+      const d =  await this.formModel
+      .findById(id)
+      .lean()
+      .exec();
+      return d;
+
     }
 }

@@ -1,0 +1,1 @@
+{"version":3,"file":"update-admin.dto.js","sourceRoot":"","sources":["update-admin.dto.ts"],"names":[],"mappings":";;;;;;;;;AACA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,UAAU,EAAW,MAAM,iBAAiB,CAAC;AAEzE,MAAM,OAAO,cAAc;IAIvB,IAAI,CAAS;IAIb,KAAK,CAAS;IAGd,KAAK,CAAS;CACjB;AARG;IAFC,QAAQ,EAAE;IACV,UAAU,EAAE;;4CACA;AAIb;IAFC,OAAO,EAAE;IACT,UAAU,EAAE;;6CACC;AAGd;IADC,QAAQ,EAAE;;6CACG"}

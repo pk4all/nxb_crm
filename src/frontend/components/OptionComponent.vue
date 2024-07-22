@@ -29,11 +29,12 @@ import { ref, onMounted, watch } from 'vue';
       const loading = ref(true);
       const error = ref(null);
   
+      
+      const fieldValue = ref(props.modelValue);
       onMounted(async () => {
+        //console.log(fieldValue,'modelValue');
         updateValue();
       });
-      const fieldValue = ref(props.modelValue);
-      
       const updateValue = () => {
         emit('update:modelValue', fieldValue.value);
       };

@@ -1,0 +1,1 @@
+{"version":3,"file":"customfield.dto.js","sourceRoot":"","sources":["customfield.dto.ts"],"names":[],"mappings":";;;;;;;;;AACA,OAAO,EAAW,QAAQ,EAAuB,SAAS,EAAY,MAAM,iBAAiB,CAAC;AAE9F,MAAM,OAAO,cAAc;IAEvB,IAAI,CAAS;IAGb,SAAS,CAAS;IAGlB,MAAM,CAAS;IAGf,QAAQ,CAAS;CAGpB;AAZG;IADC,QAAQ,EAAE;;4CACE;AAGb;IADC,QAAQ,EAAE;;iDACO;AAGlB;IADC,SAAS,EAAE;;8CACG;AAGf;IADC,SAAS,EAAE;;gDACK"}

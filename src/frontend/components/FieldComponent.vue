@@ -25,6 +25,7 @@
       </div>
     </div>
   </div>
+
   <div v-if="optState" class="options">
     <div v-for="(opt, index) in options" :key="index">
         <OptionComponent :modelValue="opt" :index="index" @remove="removeOption(index)" @update:modelValue="updateOptionSet(index, $event)"/>
@@ -56,7 +57,7 @@
     },
     setup(props,{ emit }) {
       const fieldsData = ref({ ...props.modelValue });
-      //console.log(fieldsData,'fieldsData');
+     
       const updateValue = () => {
         emit('update:modelValue', fieldsData.value);
         //console.log(fieldsData.value.options,'fieldsData data');
@@ -68,11 +69,12 @@
       const ratingState = ref(false);
       const options = ref([]);
       const rating = ref({type:'rating',value:'2',icon:'ph-star',color:'#f57900'});
+
       const updateFieldSet = (index, newValue) => {
         emit('update:modelValue', fieldsData.value);
         fieldsData.value.type = newValue;
         if(newValue == 'checkbox' || newValue == 'select'||newValue == 'radio'){
-          options.value = [{type:'option',value:''}];
+         // options.value = [{type:'option',value:''}];
           fieldsData.value.options=options;
           optState.value=true;
           ratingState.value = false;
@@ -88,7 +90,6 @@
           ratingState.value = false;
         }
       };
-
       const updateOptionSet = (index, newValue)=>{
         emit('update:modelValue', fieldsData.value);
         options.value[index]=newValue;
@@ -108,9 +109,20 @@
         rating.value=newValue;
         fieldsData.value.options=rating;
         emit('update:modelValue', fieldsData.value);
-        // console.log('rating value data',newValue,index,rating);
-        // console.log('rating fields Data',fieldsData,index);
       }
+
+      onMounted(async () => {
+        if((fieldsData.value.type=='checkbox'|| fieldsData.value.type == 'select'||fieldsData.value.type == 'radio') & fieldsData.value.options.length>1){
+          options.value = fieldsData.value.options;
+          optState.value=true;
+         
+        }
+        if(fieldsData.value.type=='rating' & fieldsData.value.options.value){
+          ratingState.value = true;
+          rating.value = fieldsData.value.options;
+        }
+      });
+
       return {
         fieldsData,
         updateValue,

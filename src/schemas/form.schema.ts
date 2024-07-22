@@ -13,8 +13,11 @@ export class Form {
   @Prop()
   title: string;
 
-  @Prop()
-  type: string;
+  // @Prop({ref: 'Category'})
+  // type: string;
+
+  @Prop({ref: 'Category'})
+  category: string;
 
   @Prop()
   typeName: string;

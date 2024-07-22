@@ -3,6 +3,7 @@ import {
     Post, 
     Query,
     Get,
+    Param,
     Render,
     UseGuards,
     UploadedFile,
@@ -29,19 +30,65 @@ export class FormController {
     async newForm(){
         return {layout:'user'}
     }
+    @Get('/edit/:id')
+    @Render('user/edit_form')
+    async editForm(){
+        return {layout:'user'}
+    }
+    @Get('/getForm/:id')
+    async getForm(@Param('id') id: string){
+        const f = await this.formService.getForm(id);
+        return f;
+    }
+
     @Get('/list')
     @Render('user/form_list')
-    async formsList(@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'createdAt',@Query('sortOrder') sortOrder: string = 'desc',@Req() req: Request): Promise<{ forms:any, pagination:any,layout:string}> {
+    async formsList(@Query() paginationQuery: PaginationQueryDto,@Req() req: Request) {
+        try {
+           const {page=1,limit=5} = paginationQuery;
+        //   const forms=await this.formService.getAllForms(paginationQuery,sortBy,sortOrder);;
+           const pagination = await this.formService.getPaginatedForms(limit, page);
+        //   console.log(forms,'all forms');
+          return {layout:'user',pagination};
+        } catch (error) {
+            console.log(error);
+            req.session.flash = {
+                error: error.message,
+            };
+        }
+    }
+    @Get('/list/all')
+    async formsListAll(@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'createdAt',@Query('sortOrder') sortOrder: string = 'desc',@Req() req: Request,@Res() res: Response){
         try {
           const {page=1,limit=5} = paginationQuery;
           const forms=await this.formService.getAllForms(paginationQuery,sortBy,sortOrder);;
           const pagination = await this.formService.getPaginatedForms(limit, page);
-          return {layout:'user',pagination,forms};
-  
+          console.log(forms,'all forms');
+          res.json({status:'success',data:forms,message:'all data',pagination}).status(200);
         } catch (error) {
+            console.log(error);
             req.session.flash = {
                 error: error.message,
             };
+            res.json({status:'success',message:error.message,data:''});
+        }
+    }
+
+    @Post('/change-status/:id')
+    async updateStatus(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
+        var data = req?.body||{};
+        console.log(data,id);
+        try {
+            const formData = await this.formService.getForm(id);
+            if(formData?.status){
+                formData.status = false;
+            }else{
+                formData.status = true;
+            }
+            await this.formService.editForm({status:formData.status},id);
+            res.json({status:'success',message: 'Form status changed successfully.'});
+        }catch (error){
+            res.json({status:'error',message: error.message});
         }
     }
     
@@ -65,7 +112,7 @@ export class FormController {
         }
     }
 
-    @Post('/save-file')
+    @Post('/save-file/')
     @UseInterceptors(FileInterceptor('image', {
         storage: diskStorage({
           destination: './public/uploads/form/images',
@@ -90,17 +137,30 @@ export class FormController {
         }
     }
 
-    @Post('/save-form')
-    async saveForm(@Req() req: Request, @Res() res: Response){
+    @Post('/save-form/:id?')
+    async saveForm(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
         try {
-            var data = req?.body||{};
-            if(data.visibility==true){
-                data.visibility='private';
+            if(id){
+                var data = req?.body||{};
+                if(data.visibility==true){
+                    data.visibility='private';
+                }else{
+                    data.visibility='public';
+                }
+                const f = await this.formService.editForm(data,id);
+                res.json({status:'success',message:'Form data successfuly saved.',data:f});
             }else{
-                data.visibility='public';
+                var data = req?.body||{};
+                if(data.visibility==true){
+                    data.visibility='private';
+                }else{
+                    data.visibility='public';
+                }
+                const f = await this.formService.create(data);
+                res.json({status:'success',message:'Form data successfuly saved.',data:f});
             }
-            const f = await this.formService.create(data);
-            res.json({status:'success',message:'Form data successfuly saved.',data:f});
+            
+
         } catch (error) {
             res.json({status:'error',message:error.message});
         }

@@ -1,3 +1,15 @@
+
 import { createApp } from 'vue';
 import Form from './components/FormList.vue';
-createApp(Form).mount('#app');
+
+const capitalizeMixin = {
+    methods: {
+      capitalizeFirstLetter(string) {
+        if (!string) return '';
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      },
+    },
+  };
+const app = createApp(Form);
+app.mixin(capitalizeMixin);
+app.mount('#app');

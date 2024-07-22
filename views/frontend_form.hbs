@@ -1,54 +1,114 @@
 <div class="content-wrapper">
     <div class="content-inner">
         <div class="profile-cover">
-					<div class="profile-cover-img" style="background-image: url(/images/demo/cover2.jpg)"></div>
+					<div class="profile-cover-img" style="background-image: url('/uploads/form/images/{{data.coverImage}}')"></div>
+                  
 					<div class="d-flex align-items-center text-center text-lg-start flex-column flex-lg-row position-absolute start-0 end-0 bottom-0 mx-3 mb-3">
 						<div class="me-lg-3 mb-2 mb-lg-0">
 							<a href="#">
-								<img src="/images/demo/users/face11.jpg" class="img-thumbnail rounded-circle shadow" width="100" height="100" alt="">
+								<img src="/uploads/form/images/{{data.profileImage}}" class="img-thumbnail rounded-circle shadow" width="100" height="100" alt="">
 							</a>
 						</div>
 
 						<div class="profile-cover-text text-white">
-				    		<h1 class="mb-0">Hanna Dorman</h1>
-				    		<span class="d-block">UX/UI designer</span>
+				    		<h2 class="mb-0">{{data.title}}</h2>
+				    		<span class="d-block">{{data.category.name}}</span>
+                           <p> {{data.description}}</p>
 						</div>
 						<div class="ms-lg-auto mt-2 mt-lg-0">
 							<div class="d-inline-flex">
 								<a href="#" class="btn btn-light border-transparent shadow ms-3">
 									<i class="ph-chart-line me-2"></i>
-									Statistics
+									
 								</a>
 							</div>
 						</div>
 					</div>
 		</div>
         <div class="navbar navbar-expand-lg border-bottom py-2">
-					<div class="container-fluid">
-                        
-					</div>
+					<div class="container-fluid"></div>
 				</div>
-        <div class="content">
+        <div class="content" >
             <div class="d-flex align-items-stretch flex-column">
                 <div class="card">
                     <div class="card-header d-sm-flex">
-                        <h5 class="mb-0">Weekly statistics</h5>
+                        <h5 class="mb-0">Questions</h5>
                         <div class="mt-2 mt-sm-0 ms-auto">
                             <span>
                                 <i class="ph-clock-counter-clockwise me-1"></i>
-                                Updated 2 hours ago
+                                Last Response 2 hours ago
                             </span>
                         </div>
                     </div>
                     <div class="card-body">
-
+                        <div id="surveyContainer">
+                            
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{{!-- <script src="/public/vue/showForm.bundle.js"></script> --}}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://unpkg.com/survey-jquery/defaultV2.min.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/survey-jquery/survey.jquery.min.js"></script>
+<script>
+   const surveyJson = {
+  pages: [{
+    name: "PersonalDetails",
+    elements: [{
+      type: "text",
+      isRequired:true,
+      name: "q_0",
+      inputType: "url",
+      title: "Enter your first name:"
+    }, {
+      type: "comment",
+      name: "LastName",
+      title: "Enter your last name:"
+    },{
+        type: "checkbox",
+        name: "product",
+        title: "Which product are you using?",
+        isRequired: false,
+        choices: [
+            "Product 1",
+            "Product 2",
+            "Product 3",
+            "Product 4"
+        ]
+    },{
+        type: "radiogroup",
+        name: "satisfaction",
+        title: "How satisfied are you with our product?",
+        isRequired: true,
+        choices: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"]
+        },{
+      type: "panel",
+      name: "Contacts",
+      state: "collapsed",
+      title: "Contacts (optional)",
+      elements: [{
+        type: "text",
+        name: "Telegram",
+        title: "Telegram:"
+      }, {
+        type: "text",
+        name: "GitHub",
+        title: "GitHub username:"
+      }]
+    }]
+  }]
+};
 
+const survey = new Survey.Model(surveyJson);
+$(function() {
+    $("#surveyContainer").Survey({ model: survey });
+
+});
+</script>
 <style>
 .content {
     padding: var(--spacer) 1.25rem;
@@ -56,4 +116,7 @@
     flex-grow: 1;
 }
 </style>
+
+
+
   

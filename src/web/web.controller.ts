@@ -1,5 +1,6 @@
-import { Controller,Get, Post,Render } from '@nestjs/common';
+import { Controller,Get, Post,Render,Param } from '@nestjs/common';
 import { WebService } from './web.service';
+import { FormService } from 'src/user/form/form.service';
 
 @Controller()
 export class WebController {
@@ -32,8 +33,13 @@ export class WebController {
 
     @Get('/content/:type/:id')
     @Render('frontend_form')
-    async frontForm(){
-
-        return {layout:'web'}
+    async frontForm(@Param('id') id: string){
+        try {
+            const f = await this.webService.getForm(id);
+            return {layout:'web',data:f}
+        } catch (error) {
+            return {layout:'web',data:[],error:error.message}
+        }
+        
     }
 }
