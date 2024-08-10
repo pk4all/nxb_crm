@@ -14,6 +14,7 @@ import { AdsModule } from './admin/ads/ads.module';
 import { SubscriptionModule } from './admin/subscription/subscription.module';
 import { WebModule } from './web/web.module';
 import { FormModule } from './user/form/form.module';
+import { EmailTemplateModule } from './admin/emailtemplate/emailtemplate.module';
 require('dotenv').config();
 @Module({
   imports: [
@@ -28,7 +29,8 @@ require('dotenv').config();
     AdsModule,
     SubscriptionModule,
     WebModule,
-    FormModule
+    FormModule,
+    EmailTemplateModule
   ],
   controllers: [AppController],
   providers: [AppService],

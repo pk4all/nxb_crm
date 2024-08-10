@@ -11,6 +11,9 @@ export class Form {
   id: string;
 
   @Prop()
+  uid: string;
+
+  @Prop()
   title: string;
 
   // @Prop({ref: 'Category'})

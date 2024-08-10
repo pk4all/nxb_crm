@@ -8,7 +8,10 @@ module.exports = {
     form: './src/frontend/form.js',
     formList: './src/frontend/form_list.js',
     editForm: './src/frontend/edit_form.js',
-    showForm: './src/frontend/show_form.js'
+    showForm: './src/frontend/show_form.js',
+    formResponse: './src/frontend/form_response.js',
+    
+
   },
   output: {
     path: path.resolve(__dirname, 'public/vue'),

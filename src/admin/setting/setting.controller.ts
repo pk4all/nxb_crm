@@ -6,7 +6,7 @@ import { SettingService } from './setting.service';
 import { SessionGuard } from '../../gaurds/session.guard';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { Response, Request } from 'express';
-@ApiExcludeController()
+
 @UseGuards(SessionGuard)
 @Controller('admin')
 export class SettingController {

@@ -1,0 +1,27 @@
+.full-width{
+  width: 100%;
+}
+
+.right-card{
+	position: fixed;
+	z-index: 2;
+	right: 0;
+    top:175px;
+	width: 450px;
+	height: auto;
+	-webkit-transition: all .4s ease 0s;
+	transition: all .4s ease 0s;
+	-webkit-transform: translateX(600px);
+	transform: translateX(600px);
+	background: #c71c82;
+	border-left: 1px solid rgba(255,255,255,.1);
+}
+.right-card select{
+  background-color:#c71c82;
+}
+.right-card.active {
+    right: 600px;
+    width: 450px;
+    -webkit-transition: all .4s ease 0s;
+    transition: all .4s ease 0s;
+}

@@ -140,29 +140,47 @@ export class FormController {
     @Post('/save-form/:id?')
     async saveForm(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
         try {
+            var data = req?.body||{};
+                if(data.visibility==true){
+                    data.visibility='private';
+                }else{
+                    data.visibility='public';
+                }
+                data.uid = req.session.user._id||'';
             if(id){
-                var data = req?.body||{};
-                if(data.visibility==true){
-                    data.visibility='private';
-                }else{
-                    data.visibility='public';
-                }
                 const f = await this.formService.editForm(data,id);
-                res.json({status:'success',message:'Form data successfuly saved.',data:f});
+                res.json({status:'success',message:'Form data successfuly edited.',data:f});
             }else{
-                var data = req?.body||{};
-                if(data.visibility==true){
-                    data.visibility='private';
-                }else{
-                    data.visibility='public';
-                }
                 const f = await this.formService.create(data);
                 res.json({status:'success',message:'Form data successfuly saved.',data:f});
             }
-            
+            console.log(req.session.user,'user');
 
         } catch (error) {
             res.json({status:'error',message:error.message});
+        }
+    }
+
+    @Get('/responses/:id')
+    @Render('user/form_responses')
+    async formResponses(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
+        return {layout:'user',id:id};
+    }
+
+    @Get('/responses-list/:id')
+    async formsResponsesList(@Param('id') id: string,@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'createdAt',@Query('sortOrder') sortOrder: string = 'desc',@Req() req: Request,@Res() res: Response){
+        try {
+          const {page=1,limit=5} = paginationQuery;
+          const forms=await this.formService.getAllResponses(paginationQuery,sortBy,sortOrder,id);;
+          const pagination = await this.formService.getPaginatedResponses(limit, page,id);
+          console.log(forms,'all forms');
+          res.json({status:'success',data:forms,message:'all data',pagination}).status(200);
+        } catch (error) {
+            console.log(error);
+            req.session.flash = {
+                error: error.message,
+            };
+            res.json({status:'success',message:error.message,data:''});
         }
     }
 }

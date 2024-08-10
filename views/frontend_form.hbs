@@ -1,33 +1,36 @@
 <div class="content-wrapper">
     <div class="content-inner">
         <div class="profile-cover">
-					<div class="profile-cover-img" style="background-image: url('/uploads/form/images/{{data.coverImage}}')"></div>
-                  
+          {{#if data.coverImage}}
+					  <div class="profile-cover-img" style="background-image: url('/uploads/form/images/{{data.coverImage}}')"></div>
+            {{else}}
+            <div class="mt-5 p-5"></div>
+            {{/if}}    
 					<div class="d-flex align-items-center text-center text-lg-start flex-column flex-lg-row position-absolute start-0 end-0 bottom-0 mx-3 mb-3">
+            {{#if data.profileImage}}
 						<div class="me-lg-3 mb-2 mb-lg-0">
 							<a href="#">
 								<img src="/uploads/form/images/{{data.profileImage}}" class="img-thumbnail rounded-circle shadow" width="100" height="100" alt="">
 							</a>
 						</div>
-
+            {{/if}}
 						<div class="profile-cover-text text-white">
 				    		<h2 class="mb-0">{{data.title}}</h2>
 				    		<span class="d-block">{{data.category.name}}</span>
-                           <p> {{data.description}}</p>
+                <p> {{data.description}}</p>
 						</div>
 						<div class="ms-lg-auto mt-2 mt-lg-0">
 							<div class="d-inline-flex">
 								<a href="#" class="btn btn-light border-transparent shadow ms-3">
 									<i class="ph-chart-line me-2"></i>
-									
 								</a>
 							</div>
 						</div>
 					</div>
 		</div>
         <div class="navbar navbar-expand-lg border-bottom py-2">
-					<div class="container-fluid"></div>
-				</div>
+			<div class="container-fluid"></div>
+		</div>
         <div class="content" >
             <div class="d-flex align-items-stretch flex-column">
                 <div class="card">
@@ -41,9 +44,12 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div id="surveyContainer">
+                        <div id="formContainer">
                             
                         </div>
+                    </div>
+                    <div id="surveyResult" class="card-footer">
+
                     </div>
                 </div>
             </div>
@@ -54,59 +60,170 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="https://unpkg.com/survey-jquery/defaultV2.min.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="https://unpkg.com/survey-jquery/survey.jquery.min.js"></script>
+{{!-- <script type="text/javascript" src="https://unpkg.com/survey-core/themes/contrast-dark.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/survey-core/themes/contrast-light.min.js"></script> --}}
 <script>
-   const surveyJson = {
-  pages: [{
-    name: "PersonalDetails",
-    elements: [{
-      type: "text",
-      isRequired:true,
-      name: "q_0",
-      inputType: "url",
-      title: "Enter your first name:"
-    }, {
-      type: "comment",
-      name: "LastName",
-      title: "Enter your last name:"
-    },{
-        type: "checkbox",
-        name: "product",
-        title: "Which product are you using?",
-        isRequired: false,
-        choices: [
-            "Product 1",
-            "Product 2",
-            "Product 3",
-            "Product 4"
-        ]
-    },{
-        type: "radiogroup",
-        name: "satisfaction",
-        title: "How satisfied are you with our product?",
-        isRequired: true,
-        choices: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"]
-        },{
-      type: "panel",
-      name: "Contacts",
-      state: "collapsed",
-      title: "Contacts (optional)",
-      elements: [{
-        type: "text",
-        name: "Telegram",
-        title: "Telegram:"
-      }, {
-        type: "text",
-        name: "GitHub",
-        title: "GitHub username:"
-      }]
-    }]
-  }]
-};
+const tempFileStorage = {};
+const allData = async()=>{
+    const response = await fetch('/all-fields/{{data._id}}');
+    const jsonData = await response.json();
+    const fieldsJson = {
+        showProgressBar: "bottom",
+        pages: [{
+            name: "{{data.title}}",
+            elements:jsonData.outputJson
+        }],
+        completedHtml: "<h4>Thank you for completing the form!</h4>"
+    };
+    const survey = new Survey.Model(fieldsJson);
+    //survey.applyTheme(SurveyTheme.LayeredDarkPanelless);
+    survey.onUploadFiles.add((_, options) => {
+        if (tempFileStorage[options.name] !== undefined) {
+            tempFileStorage[options.name] = tempFileStorage[options.name].concat(options.files);
+        } else {
+            tempFileStorage[options.name] = options.files;
+        }
+        const content = [];
+        options.files.forEach(file => {
+            const fileReader = new FileReader();
+            fileReader.onload = () => {
+                content.push({
+                    name: file.name,
+                    type: file.type,
+                    content: fileReader.result,
+                    file: file
+                });
+                if (content.length === options.files.length) {
+                    options.callback(
+                        content.map(fileContent => {
+                            return {
+                                file: fileContent.file,
+                                content: fileContent.content
+                            };
+                        })
+                    );
+                }
+            };
+            fileReader.readAsDataURL(file);
+        });
+    });
+    survey.onClearFiles.add((_, options) => {
+        if (options.fileName === null) {
+            tempFileStorage[options.name] = [];
+            options.callback("success");
+            return;
+        }
+        const tempFiles = tempFileStorage[options.name];
+        if (!!tempFiles) {
+            const fileInfoToRemove = tempFiles.filter(file => file.name === options.fileName)[0];
+            if (fileInfoToRemove) {
+                const index = tempFiles.indexOf(fileInfoToRemove);
+                tempFiles.splice(index, 1);
+            }
+        }
+        options.callback("success");
+    });
 
-const survey = new Survey.Model(surveyJson);
+    survey.onComplete.add(surveyComplete);
+
+    $("#formContainer").Survey({ model: survey });
+}
+ 
+const surveyComplete = async (survey) => {
+    const userId = '{{uid}}';
+    survey.setValue("userId", userId);
+    const r = await uploadFiles(survey);
+    if(r){
+         saveSurveyResults(
+            "/forms/save-response/{{data._id}}",
+            r.data
+        );
+    }else{
+        return false;
+    }
+    
+}
+
+const uploadFiles= async(result)=>{
+    const questionsToUpload = Object.keys(tempFileStorage);
+    if(questionsToUpload.length > 0){
+        for (let i = 0; i < questionsToUpload.length; i++) {
+            const questionName = questionsToUpload[i];
+            const question = result.getQuestionByName(questionName);
+            const filesToUpload = tempFileStorage[questionName];
+
+            const formData = new FormData();
+            filesToUpload.forEach(file => {
+                formData.append('files', file);
+            });
+        
+            await fetch("/save-file", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Save metadata about uploaded files as the question value
+                // console.log('all files data',data);
+                 if(data.status=='success'){
+                    question.value = data.files.map(file => {
+                        return {
+                            file: file.filename,
+                            type: file.mimetype,
+                            path:'/uploads/survey/files/'+file.filename,
+                        };
+                    });
+                    
+                 }else{
+                    console.error("Upload Error:", data.message);
+                     displaySurveyResults(data);
+                      return false;
+                 }
+                
+               
+               // console.log('all data',question);
+               // console.log(result,'result');
+
+                //if (questionsToUpload.length === i + 1)
+                   // displaySurveyResults(result);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                displaySurveyResults(error)
+                return false;
+            });
+
+            return result;
+        }
+    }
+    
+}
+function displaySurveyResults(result) {
+    document
+        .querySelector('#surveyResult')
+        .className('error')
+        .textContent = "Result:\n" + JSON.stringify(result.message, null, 3);
+}
+function saveSurveyResults(url, json) {
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify(json)
+    }).then(response => response.json())
+    .then(response => {
+        if(response.status=='success'){
+            console.log(response,'response after save survey')
+        }else{
+            console.error("Error:", response.message);
+        }
+    }).catch(error => {
+        console.error("Error:", error);
+    });
+}
 $(function() {
-    $("#surveyContainer").Survey({ model: survey });
-
+  allData();
 });
 </script>
 <style>

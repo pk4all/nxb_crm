@@ -199,6 +199,5 @@ function updateData(){
         console.error('Error uploading file:', error);
         
       });
-
     return false;
 }

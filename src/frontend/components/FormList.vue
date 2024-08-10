@@ -48,6 +48,14 @@
 													<i class="ph-article  me-2"></i>
 													Responses
 												</a>
+                        <a :href="`/form/setting/${ opt._id }`" class="dropdown-item" >
+													<i class="ph-gear  me-2"></i>
+													Setting
+												</a>
+                        <a :href="`/forms/${ opt._id }`" class="dropdown-item" target="_blank">
+													<i class="ph-eye   me-2"></i>
+													View
+												</a>
 											</div>
 										</div>
                       </td>

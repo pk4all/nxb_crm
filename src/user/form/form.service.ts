@@ -5,12 +5,14 @@ import { Category } from 'src/schemas/category.schema';
 import { FieldType } from 'src/schemas/fieldtype.schema';
 import { Form } from 'src/schemas/form.schema';
 import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
+import { FormResponse } from 'src/schemas/formresponse.schema';
 @Injectable()
 export class FormService {
     constructor(
         @InjectModel(Category.name) private categoryModel: Model<Category>,
         @InjectModel(FieldType.name) private fieldTypeModel: Model<FieldType>,
-        @InjectModel(Form.name) private formModel: Model<Form>
+        @InjectModel(Form.name) private formModel: Model<Form>,
+        @InjectModel(FormResponse.name) private formResponseModel: Model<FormResponse>
     ) {}
 
     async getAllCategories(){
@@ -84,11 +86,58 @@ export class FormService {
       }  
     }
     async getForm(id){
-      const d =  await this.formModel
-      .findById(id)
-      .lean()
-      .exec();
-      return d;
+      try {
+        const d =  await this.formModel
+        .findById(id)
+        .lean()
+        .exec();
+        return d;
+      } catch (error) {
+        throw new ConflictException(error?.message||'Data not saved');
+      }
+      
 
+    }
+
+    async getAllResponses(paginationQuery: PaginationQueryDto,sortBy: string, sortOrder: string,id:string): Promise<FormResponse[]>{
+      const { limit, search,page=1} = paginationQuery;
+      const sortCriteria:any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
+      const query = search ? { title: new RegExp(search, 'i'),formId:id } : {formId:id};
+
+      const l = limit||1;
+      const ofs = ((page-1)*l);
+      try {
+        return this.formResponseModel
+        .find(query)
+        .skip(ofs)
+        .limit(l)
+        .sort(sortCriteria)
+        .lean()
+        .exec();
+      } catch (error) {
+        throw new BadRequestException(error?.message||'NO data');
+      }
+      
+    }
+  
+    async getPaginatedResponses(limit: number, page: number,id:string): Promise<any> {
+      try {
+        const total = await this.formResponseModel.countDocuments({formId:id}).exec();
+        const totalPages = Math.ceil(total / limit);
+        const usedPage:string = String(page);
+        const paginationData = {
+            limit: limit,
+            page: page,
+            totalPages,
+            total,
+            pageMinusOne: parseInt(usedPage) - 1,
+            pagePlusOne: parseInt(usedPage) + 1,
+            pages: Array.from({ length: totalPages }, (_, i) => i + 1)
+          };
+          return paginationData;
+      } catch (error) {
+        throw new BadRequestException(error?.message||'NO data');
+      }
+        
     }
 }
