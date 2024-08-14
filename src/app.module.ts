@@ -15,10 +15,13 @@ import { SubscriptionModule } from './admin/subscription/subscription.module';
 import { WebModule } from './web/web.module';
 import { FormModule } from './user/form/form.module';
 import { EmailTemplateModule } from './admin/emailtemplate/emailtemplate.module';
+import { CampaignModule } from './admin/campaign/campaign.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 require('dotenv').config();
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URI),
+    EventEmitterModule.forRoot(),
     AuthModule,
     UserModule,
     AdminUserModule,
@@ -30,7 +33,8 @@ require('dotenv').config();
     SubscriptionModule,
     WebModule,
     FormModule,
-    EmailTemplateModule
+    EmailTemplateModule,
+    CampaignModule
   ],
   controllers: [AppController],
   providers: [AppService],

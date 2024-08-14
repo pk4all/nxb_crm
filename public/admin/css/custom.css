@@ -25,3 +25,6 @@
     -webkit-transition: all .4s ease 0s;
     transition: all .4s ease 0s;
 }
+.bg-1{
+	background: #c71c82;
+}

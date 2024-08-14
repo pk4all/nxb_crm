@@ -5,8 +5,11 @@ import {
     UpdateTemplateCommand,
     ListIdentitiesCommand,
     VerifyEmailIdentityCommand,
-    GetIdentityVerificationAttributesCommand
+    GetIdentityVerificationAttributesCommand,
+    GetSendQuotaCommand,
+    SendBulkTemplatedEmailCommand
 } from "@aws-sdk/client-ses";
+
 const client = new SESClient({
     region: "ap-south-1",
     credentials: {
@@ -104,6 +107,35 @@ export async function sendVerificationEmail(email){
             EmailAddress:email,
         };
         const command = new VerifyEmailIdentityCommand(input);
+        const response = await client.send(command);
+        return response;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function getSendingStatistics(){
+    try {
+
+        const input = {};
+        const command = new GetSendQuotaCommand(input);
+        const response = await client.send(command);
+        return response;
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function sendBulkTemplatedEmail(source,template,contacts){
+    try {
+        const input = { // SendBulkTemplatedEmailRequest
+            Source: source, // required
+            Template: template, // required
+            DefaultTemplateData: "{ \"name\":\"User\"}",
+            Destinations:contacts,
+          };
+        const command = new SendBulkTemplatedEmailCommand(input);
         const response = await client.send(command);
         return response;
     } catch (error) {

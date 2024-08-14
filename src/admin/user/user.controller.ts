@@ -6,6 +6,7 @@ import { Response, Request,Router } from 'express';
 import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
 import { permission } from 'process';
 import { bool } from 'sharp';
+import {getSendingStatistics} from 'src/common/utils/ses.utility';
 
 @ApiExcludeController()
 @Controller('admin')
@@ -56,9 +57,11 @@ export class UserController {
 
     @UseGuards(SessionGuard)
     @Get('/dashboard')
-    getDashboard(@Req() req: Request, @Res() res: Response) {
+    async getDashboard(@Req() req: Request, @Res() res: Response) {
         //console.log(req.session.user);
-        res.render('admin/dashboard', {layout:'admin'});
+        const sendStat = await getSendingStatistics();
+        console.log(sendStat);
+        res.render('admin/dashboard', {layout:'admin',sendStat});
     }
 
     @UseGuards(SessionGuard)

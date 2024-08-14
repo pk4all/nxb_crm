@@ -7,24 +7,19 @@
                         <!-- Page-Title -->
                         <div class="row">
                             <div class="col-sm-12">
-                                <h4 class="page-title">Senders List</h4>
+                                <h4 class="page-title">Contacts List</h4>
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Form</a></li>
-                                    <li class="breadcrumb-item active">Senders</li>
+                                    <li class="breadcrumb-item active">Contacts</li>
                                 </ol>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                
-
-                                 <button id="sync" class="btn btn-default btn-md waves-effect waves-light m-b-30" onclick="sync();">
-                                    <i class="md md-sync"></i>
-                                    Sync Identities
-                                 </button>
                                    <button class="btn btn-default btn-md waves-effect waves-light m-b-30" onclick="showForm();">
                                     <i class="md md-add"></i>
-                                    Add Identities
+                                    Add Contacts
                                  </button>
 
                             </div>
@@ -49,21 +44,21 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Sr. No.</th>
-                                                        <th>Sender Name</th>
-                                                        <th>verification Status</th>
+                                                        <th>Name</th>
+                                                        <th>Total No. contacts</th>
                                                         <th>Status</th>
                                                         <th>Created</th>
-                                                        
+                                                        <th>Action</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {{#if datas.length }}
-                                                    {{#each datas }}
-                                                     
+                                                    {{#if clists.length }}
+                                                    {{#each clists }}
+
                                                    <tr>
                                                         <td>{{incrementedIndex @index}}</td>
-                                                        <td>{{{this.identityName}}}</td>
-                                                        <td>{{this.verificationStatus}}</td>
+                                                        <td>{{{this.name}}}</td>
+                                                        <td>{{this.contactsCount}}</td>
                                                         <td>
                                                             {{#if this.status }}
                                                                  <input id="{{this._id}}" class="switch" type="checkbox" checked=""  name="status" data-id="{{this._id}}">
@@ -72,6 +67,9 @@
                                                             {{/if}}
                                                         </td>
                                                         <td>{{formatDate this.createdAt}}</td>
+                                                        <td>
+
+                                                        </td>
                                                     </tr>
                                                    {{/each}}
                                                    {{else}}
@@ -89,20 +87,26 @@
 
     <div class="right-card">
 		<div class="card-body">
-		<h4 class="text-white header-title m-t-0 m-b-20">Send verify email</h4>
-		<form id="form_data" method="POST" action="" onsubmit="return send();" >	
+		<h4 class="text-white header-title m-t-0 m-b-20">Add Contacts List</h4>
+		<form id="form_data" method="POST" action="" onsubmit="return saveContacts();"  >	
 			<div class="mb-3">
-                <label class="form-label text-white" for="email">Email</label>
-                <input id="email" type="email" class="form-control" name="email" value="" required="" />
+                <label class="form-label text-white" for="email">Group Name *</label>
+                <input id="name" type="text" class="form-control" name="name" value="" required="" />
 		    </div>
-		<div class="mb-3 m-t-40">
-			<button id="save"  type="submit" class="btn btn-purple btn-md w-md waves-effect waves-light" >
-				Send
-			</button>
-			<button  type="button" class="btn btn-purple btn-md w-md pull-right" onclick="showForm()">
-				Cancel
-			</button>
-		</div>
+            <div class="mb-3">
+                <label class="form-label text-white" for="email">Contacts File *</label>
+                <input id="contacts" type="file" class="form-control" name="contacts" value="" required="" accept=".xlsx, .xls, .csv" />
+                <small class="text-white">(Only .csv,.xlsx or .xls file) <a class="text-white" href="/emails.xlsx"> <i class="md md-download"></i> Download Sample File</a></small>
+		    </div>
+            
+            <div class="mb-3 m-t-40">
+                <button id="save"  type="submit" class="btn btn-purple btn-md w-md waves-effect waves-light" >
+                    Save
+                </button>
+                <button  type="button" class="btn btn-purple btn-md w-md pull-right" onclick="showForm()">
+                    Cancel
+                </button>
+            </div>
          <div id="outMsg" class="mb-3"></div>
 		</form>
 		</div>
@@ -133,38 +137,15 @@ function showForm(){
 	$('.right-card').toggleClass('active');
 }
 
-function sync(){
-    var l = Ladda.create(document.querySelector('#sync'));
-    l.start();
-    fetch('/admin/template/sync-identities', {
-            method: 'POST'
-        })
-        .then(response => response.text())
-        .then(result => {
-            var r = JSON.parse(result);
-            console.log(r);
-            l.stop();
-            if(result.status=='success'){
-            }
-            window.location.reload(true);
-        }).catch(error => {
-            console.error('Error:', error);
-            l.stop();
-        });
-}
-
-function send(){
+function saveContacts(){
     var l = Ladda.create(document.querySelector('#save'));
     l.start();
-    const email = document.getElementById('email').value;
-    fetch('/admin/template/add-identity', {
+    //const name = document.getElementById('name').value;
+    const form = document.getElementById('form_data');
+    var catForm = new FormData(form);
+        fetch('/admin/template/save-contacts', {
             method: 'POST',
-            body: JSON.stringify({
-                identityName:email
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            body:catForm
         })
         .then(response => response.text())
         .then(result => {
@@ -172,7 +153,8 @@ function send(){
             l.stop();
             if(r.status=='success'){
                 $('#outMsg').html('<div class="alert alert-success">'+r?.message+'</div>');
-                document.getElementById('email').value='';
+                form.reset();
+                window.location.reload(true);
             }
             if(r.status=='error'){
                 $('#outMsg').html('<div class="alert alert-danger">'+r?.message+'</div>');

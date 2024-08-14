@@ -34,11 +34,11 @@
                                             </div>
 
                                             <div class="table-detail">
-                                                <h4 class="m-t-0 m-b-5 font-18"><b>Active</b></h4>
-                                                <h5 class="text-muted m-b-0 m-t-0 font-16">120 Deals</h5>
+                                                <h4 class="m-t-0 m-b-5 font-18"><b>SES Total Limit</b></h4>
+                                                <h5 class="text-muted m-b-0 m-t-0 font-16">{{sendStat.Max24HourSend}}</h5>
                                             </div>
                                             <div class="table-detail text-right">
-                                                <span data-plugin="peity-bar" data-colors="#34d3eb,#ebeff2" data-width="120" data-height="45">1/5</span>
+                                                <span data-plugin="peity-bar" data-colors="#34d3eb,#ebeff2" data-width="120" data-height="45"></span>
                                             </div>
 
                                         </div>
@@ -55,13 +55,12 @@
                                                     <i class="icon-trophy"></i>
                                                 </div>
                                             </div>
-
                                             <div class="table-detail">
-                                                <h4 class="m-t-0 m-b-5 font-18"><b>Won</b></h4>
-                                                <h5 class="text-muted m-b-0 m-t-0 font-16">95 Deals</h5>
+                                                <h4 class="m-t-0 m-b-5 font-18"><b>Send Limit / Second</b></h4>
+                                                <h5 class="text-muted m-b-0 m-t-0 font-16">{{sendStat.MaxSendRate}}</h5>
                                             </div>
                                             <div class="table-detail text-right">
-                                                <span data-plugin="peity-pie" data-colors="#5fbeaa,#ebeff2" data-width="50" data-height="45">1/5</span>
+                                                <span data-plugin="peity-pie" data-colors="#5fbeaa,#ebeff2" data-width="50" data-height="45"></span>
                                             </div>
 
                                         </div>
@@ -80,11 +79,11 @@
                                             </div>
 
                                             <div class="table-detail">
-                                                <h4 class="m-t-0 m-b-5 font-18"><b>Lost</b></h4>
-                                                <h5 class="text-muted m-b-0 m-t-0 font-16">85 Deals</h5>
+                                                <h4 class="m-t-0 m-b-5 font-18"><b>Sent In Last 24 Hours</b></h4>
+                                                <h5 class="text-muted m-b-0 m-t-0 font-16">{{sendStat.SentLast24Hours}}</h5>
                                             </div>
                                             <div class="table-detail text-right">
-                                                <span data-plugin="peity-donut" data-colors="#f05050,#ebeff2" data-width="50" data-height="45">1/5</span>
+                                                <span data-plugin="peity-donut" data-colors="#f05050,#ebeff2" data-width="50" data-height="45"></span>
                                             </div>
 
                                         </div>

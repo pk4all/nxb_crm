@@ -3,16 +3,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
 import { EmailTemplate } from 'src/schemas/emailtemplate.schema';
-import { Identitie } from 'src/schemas/identitie.schema';
+import { Identity } from 'src/schemas/identity.schema';
+import { Contact } from 'src/schemas/contact.schema';
 
 @Injectable()
 export class EmailTemplateService {
   constructor(
     @InjectModel(EmailTemplate.name) private model: Model<EmailTemplate>,
-    @InjectModel(Identitie.name) private identitieModel: Model<Identitie>,
+    @InjectModel(Identity.name) private identityModel: Model<Identity>,
+    @InjectModel(Contact.name) private contactModel: Model<Contact>,
   ){}
   async create(jsonData:any) {
     try {
+      //console.log(jsonData,'tmpl data');
       return await this.model.create(jsonData);
     } catch (error) {
       throw new ConflictException(error?.message||'Data not saved');
@@ -25,7 +28,7 @@ export class EmailTemplateService {
     const query = search ? { title: new RegExp(search, 'i') } : {};
     const l = limit||5;
     const ofs = ((page-1)*l);
-    return this.model
+    return await this.model
       .find(query)
       .skip(ofs)
       .limit(l)
@@ -51,7 +54,7 @@ export class EmailTemplateService {
 
   async update(jsonData:any,id){
     try {
-      //  console.log(jsonData,id);
+      console.log(jsonData,'tmpl data');
       return  await this.model.findByIdAndUpdate(id,jsonData);
     } catch (error) {
       throw new ConflictException(error?.message||'Data not saved');
@@ -70,19 +73,81 @@ export class EmailTemplateService {
       return this.model.findByIdAndDelete(id).exec();
   }
 
-  async createIdentitie(jsonData:any){
+  async createIdentity(jsonData:any){
     try {
-      return await this.identitieModel.create(jsonData);
+      return await this.identityModel.create(jsonData);
     } catch (error) {
       throw new Error(error?.message||'Data not saved');
     }
   }
 
-  async updateIdentitie(jsonData:any,id){
+  async updateIdentity(jsonData:any,id){
     try {
-      return  await this.identitieModel.findByIdAndUpdate(id,jsonData);
+      return  await this.identityModel.findByIdAndUpdate(id,jsonData);
     } catch (error) {
       throw new Error(error?.message||'Data not saved');
+    }
+  }
+
+  async updateOrCreateIdentity(data,email){
+    try {
+      return  await this.identityModel.updateOne({identityName:email}, data, { upsert: true });
+    } catch (error) {
+      throw new Error(error?.message||'Data not saved');
+    }
+  }
+
+  async getIdentitiyData(email){
+    try {
+      //return await this.model.findOne({identityName:email}).lean().exec();
+      return await this.identityModel.findOne({identityName:email}).lean().exec();
+    } catch (error) {
+      throw new ConflictException(error?.message||'No Data');
+    }
+  }
+
+  async getIdentitiy(id){
+    try {
+      return await this.identityModel.findById(id).lean().exec();
+    } catch (error) {
+      throw new ConflictException(error?.message||'No Data');
+    }
+  }
+
+  async getIdentitiesData(){
+    try {
+      const datas = await this.identityModel.find({}).lean().exec();
+      return datas;
+
+    } catch (error) {
+      throw new Error(error?.message||'No Data');
+    }
+  }
+
+  async createContact(jsonData){
+    try {
+      return await this.contactModel.create(jsonData);
+    } catch (error) {
+      throw new Error(error?.message||'Data not saved');
+    }
+  }
+
+  async getContactsData(){
+    try {
+      //const datas = await this.contactModel.find({}).lean().exec();
+      const results = await this.contactModel.aggregate([
+        {
+          $project: {
+            name: 1,
+            status:1,
+            contactsCount: { $size: '$contacts' },
+          },
+        },
+      ]).exec();
+      //console.log(results,'results');
+      return results;
+    } catch (error) {
+      throw new Error(error?.message||'No Data');
     }
   }
 }

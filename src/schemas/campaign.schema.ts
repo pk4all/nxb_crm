@@ -1,34 +1,33 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument,Types } from 'mongoose';
 
-export type IdentitieDocument = HydratedDocument<Identitie>;
+export type CampaignDocument = HydratedDocument<Campaign>;
 
 @Schema({timestamps: true})
-export class Identitie {
+export class Campaign {
   @Prop()
   id: string;
 
   @Prop({required: true})
-  templateName: string;
+  name: string;
 
   @Prop({required: true})
-  templateSlug: string;
+  template: string;
+
+  @Prop({required: true,type:Types.ObjectId})
+  contact:string;
 
   @Prop({required: true})
-  templateSubject: string;
+  sender: string;
 
-  @Prop({required: true})
-  templateContent: string;
-
-  @Prop({default:true})
+  @Prop({default:'email'})
   type:string;
+
+  @Prop({default:'created'})
+  campaignStatus:string;
 
   @Prop({default:true})
   status:boolean;
-
-  @Prop()
-  resourceId:string;
-
 
   @Prop()
   createdAt:Date;
@@ -36,4 +35,4 @@ export class Identitie {
   @Prop()
   updatedAt:Date;
 }
-export const IdentitieSchema = SchemaFactory.createForClass(Identitie);
+export const CampaignSchema = SchemaFactory.createForClass(Campaign);

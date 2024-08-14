@@ -1,0 +1,88 @@
+    <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            
+                <div class="content">
+                    <div class="container-fluid">
+                        <!-- Page-Title -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="page-title">Campaign </h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Form</a></li>
+                                    <li class="breadcrumb-item active">Campaign</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                            
+                            </div>
+                        </div>
+
+                         <div class="row justify-content-md-center">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <div class="card-box">
+                                    {{#if flash.error}}
+                                        <div class="alert alert-danger">
+                                        {{{flash.error}}}
+                                        </div>
+                                    {{/if}}
+                                    {{#if flash.success}}
+                                        <div class="alert alert-success">
+                                        {{{flash.success}}}
+                                        </div>
+                                    {{/if}}
+                                        <h4 class="text-dark header-title m-t-0">Campaign Details</h4>
+                                        <div class="table-responsive">
+                                          
+                                        <table class="table table-hover m-0 table table-actions-bar">
+                                            <tr><td>Campaign Name</td><td>{{campaign.name}}</td></tr>
+                                            <tr><td>Campaign Template</td><td>{{campaign.templates.templateName}}  ({{campaign.template}})</td></tr>
+                                            <tr><td>Contact Group</td><td>{{campaign.contacts.name}}</td></tr>
+                                            <tr><td>Total No of Contacts</td><td>{{campaign.contacts.contacts}}</td></tr>
+                                            <tr><td>From Email</td><td>{{campaign.sender}}</td></tr>
+                                            <tr><td>Status</td><td>{{campaign.status}}</td></tr>
+                                            <tr><td>Created Date</td><td>{{formatDate campaign.created_at}}</td></tr>
+                                        </table>
+                                    </div>
+                                    </div>
+                                </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                 <div class="card-box bg-1">
+                                    <button id="sent" onclick="sentCampaign()"  type="submit" class="btn btn-purple btn-md w-md waves-effect waves-light" ><i class="md md-send"></i> Send Campaign</button>
+                                 </div>
+                                
+                            </div>
+                        </div>
+                        <!-- end row -->
+                    </div> <!-- container -->
+                </div> <!-- content -->
+
+<script>
+
+function sentCampaign(){
+    var l = Ladda.create(document.querySelector('#sent'));
+    l.start();
+    fetch('/admin/campaign/sent/{{campaign._id}}', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.text())
+    .then(result => {
+        var r = JSON.parse(result);
+        l.stop();
+        
+    }).catch(error => {
+        console.error('Error:', error);
+        l.stop();
+        $('#outMsg').html('<div class="alert alert-danger">'+error?.message+'</div>');
+    });
+    return false;
+}
+</script>
+               
+
+
