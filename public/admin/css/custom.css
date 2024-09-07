@@ -28,3 +28,14 @@
 .bg-1{
 	background: #c71c82;
 }
+
+@media (prefers-color-scheme: dark) {
+    .right-card select {
+        background-color: #c71c82 !important;
+        color: white;
+    }
+	select option {
+        background-color: black !important;
+        color: white;
+    }
+}

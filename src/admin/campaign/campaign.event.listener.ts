@@ -4,6 +4,8 @@ import { Model,Types} from 'mongoose';
 import { OnEvent } from '@nestjs/event-emitter';
 import { CampaignSendEvent } from 'src/common/events/campaign-send.event';
 import { Campaign } from 'src/schemas/campaign.schema';
+import { CampaignResponse } from 'src/schemas/campaign.response.schema';
+
 const mongoose = require('mongoose');
 import {getSendingStatistics,sendBulkTemplatedEmail} from 'src/common/utils/ses.utility';
 const chunk = (arr, size) =>Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -13,6 +15,8 @@ const chunk = (arr, size) =>Array.from({ length: Math.ceil(arr.length / size) },
 export class CampaignEventListener {
     constructor(
         @InjectModel(Campaign.name) private campaignModel: Model<Campaign>,
+        @InjectModel(CampaignResponse.name) private campaignResponseModel: Model<CampaignResponse>,
+
     ){}
     @OnEvent('campaign.send')
     async handleCampaignSendEvent(event:CampaignSendEvent) {
@@ -31,16 +35,25 @@ export class CampaignEventListener {
             };
         });
         const chunkDestinations = chunk(contactsList,maxSendRate);
-        for (let i = 0; i < chunkDestinations.length; i) {
+        for (let i = 0; i < chunkDestinations.length; i++) {
             const destinations = chunkDestinations[i];
-            const res = await sendBulkTemplatedEmail(campaignData.sender,campaignData.template,destinations);
-            await this.delay(1000);// Delay between each batch
-            const saveCampdata ={batch:i,response:res,campaignId:campaignData._id};
-            
-            console.log('saveCampdata',saveCampdata);
+            const statedTime = Date.now();
+            try {
+                const res = await sendBulkTemplatedEmail(campaignData.sender,campaignData.template,destinations);
+                const endedTime = Date.now();
+                await this.delay(1000);// Delay between each batch
+                const saveCampdata ={batch:i+1,response:res,campaignId:campaignData._id,startedAt:statedTime,endedAt:endedTime,sendingRate:maxSendRate,takenTime:endedTime-statedTime};
+                await this.campaignResponseModel.create(saveCampdata);
+            } catch (error) {
+                const endedTime = Date.now();
+                const saveCampdata ={batch:i+1,response:error,campaignId:campaignData._id,startedAt:statedTime,endedAt:endedTime,sendingRate:maxSendRate,takenTime:endedTime-statedTime};
+                await this.campaignResponseModel.create(saveCampdata);
+            }
+            console.log('saveCampdata',i);
           }
         
         console.log(`campaign send with ID: ${event.campaignId}`);
+        await this.campaignModel.findByIdAndUpdate(event.campaignId,{campaignStatus:'done'});
     }
 
     async delay(ms) {

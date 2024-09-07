@@ -22,8 +22,8 @@ import * as XLSX from 'xlsx';
 export class EmailTemplateController {
   constructor(private readonly service: EmailTemplateService) {}
 
-    @Get('/email-templates')
-    @Render('admin/emailtemplate/templates')
+    @Get('/templates')
+    @Render('admin/template/templates')
     async allTemplates(@Query() paginationQuery: PaginationQueryDto, @Query('sortBy') sortBy: string = 'createdAt',@Query('sortOrder') sortOrder: string = 'desc',@Req() req: Request){
       try {
         // await deleteTemplate('listing-type-3');
@@ -40,8 +40,8 @@ export class EmailTemplateController {
       }
     }
 
-  @Get('/email-template/add')
-  @Render('admin/emailtemplate/add_template')
+  @Get('/template/add')
+  @Render('admin/template/add_template')
   add() {
     var synt='Name=>{{name}}, Email=>{{email}}, Phone=>{{phone}}, Address=>{{address}}'
     return {layout:'admin',synt:synt};
@@ -49,7 +49,7 @@ export class EmailTemplateController {
 
 
   @Get('/email-template/identities')
-  @Render('admin/emailtemplate/identities')
+  @Render('admin/template/identities')
   async identitie(@Req() req: Request) {
     try {
       const datas = await this.service.getIdentitiesData();
@@ -64,8 +64,8 @@ export class EmailTemplateController {
     
   }
 
-  @Get('/email-template/edit/:id')
-  @Render('admin/emailtemplate/edit_template')
+  @Get('/template/edit/:id')
+  @Render('admin/template/edit_template')
   async edit(@Param('id') id: string,@Req() req: Request, @Res() res: Response) {
     try {
       const data = await this.service.getData(id);
@@ -77,7 +77,7 @@ export class EmailTemplateController {
     }
   }
 
-  @Post('/email-template/create')
+  @Post('/template/create')
   async create(@Req() req: Request, @Res() res: Response) {
     try {
       var reqdata = req?.body||{};
@@ -106,7 +106,7 @@ export class EmailTemplateController {
     }
   }
 
-  @Post('/email-template/update/:id')
+  @Post('/template/update/:id')
   async update(@Body() body:any ,@Param('id') id: string,@Req() req: Request, @Res() res: Response) {
     try {
       var reqdata = req?.body||{};
@@ -133,7 +133,7 @@ export class EmailTemplateController {
   }
 
   @UseGuards(SessionGuard)
-  @Post('/email-template/delete/:id')
+  @Post('/template/delete/:id')
   async deleteType( @Param('id') id: string,@Req() req: Request, @Res() res: Response) {
     try {
       const tmpl = await this.service.getData(id);
@@ -143,21 +143,21 @@ export class EmailTemplateController {
             req.session.flash = {
                 error:HttpStatus.NOT_FOUND,
             };
-            return res.redirect('/admin/email-templates');
+            return res.redirect('/admin/templates');
         }
         req.session.flash = {
             success:'Template deleted successfully',
         };
-        return res.redirect('/admin/email-templates');
+        return res.redirect('/admin/templates');
     } catch (error) {
         req.session.flash = {
             error:error.message,
         };
-        return res.redirect('/admin/email-templates');
+        return res.redirect('/admin/templates');
     }
   }
 
-  @Post('/email-template/change-status/:id')
+  @Post('/template/change-status/:id')
     async updateStatus(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
         var data = req?.body||{};
         try {
@@ -227,7 +227,7 @@ export class EmailTemplateController {
   }
 
   @Get('/contacts/list')
-  @Render('admin/emailtemplate/contacts_list')
+  @Render('admin/template/contacts_list')
   async contactsList(@Req() req: Request, @Res() res: Response){
     try {
       const clists = await this.service.getContactsData();

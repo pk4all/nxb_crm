@@ -5,6 +5,7 @@ import { Response, Request } from 'express';
 import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CampaignSendEvent } from 'src/common/events/campaign-send.event';
+import { sendWelcomeTemplateMessage } from 'src/common/utils/whatsapp.utility';
 
 @UseGuards(SessionGuard)
 @Controller('admin')
@@ -55,9 +56,19 @@ export class CampaignController {
   async sentCampaign(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
     try {
       this.eventEmitter.emit('campaign.send', new CampaignSendEvent(id));
+      this.campaignService.updateCampaign({campaignStatus:'sending'},id)
       res.json({status:'success',message: 'Campaign successfully start.'});
     } catch (error) {
       res.json({status:'error',message: error.message});
+    }
+  }
+
+  @Get('/campaign/whatsapp')
+  async sendWhatsApp(){
+    try {
+      return await sendWelcomeTemplateMessage(918076980839);
+    } catch (error) {
+      return error.message;
     }
   }
 

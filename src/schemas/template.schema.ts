@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument,Types } from 'mongoose';
 
-export type EmailTemplateDocument = HydratedDocument<EmailTemplate>;
+export type TemplateDocument = HydratedDocument<Template>;
 
 @Schema({timestamps: true})
-export class EmailTemplate {
+export class Template {
   @Prop()
   id: string;
 
@@ -36,4 +36,4 @@ export class EmailTemplate {
   @Prop()
   updatedAt:Date;
 }
-export const EmailTemplateSchema = SchemaFactory.createForClass(EmailTemplate);
+export const TemplateSchema = SchemaFactory.createForClass(Template);

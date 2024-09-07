@@ -43,6 +43,7 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Sr. No.</th>
+                                                        <th>Type</th>
                                                         <th>Name</th>
                                                         <th>Template</th>
                                                         <th>Sender</th>
@@ -54,9 +55,9 @@
                                                     <tbody>
                                                     {{#if campaigns.length }}
                                                     {{#each campaigns }}
-
                                                    <tr>
                                                         <td>{{incrementedIndex @index}}</td>
+                                                        <td>{{this.type}}</td>
                                                         <td>{{{this.name}}}</td>
                                                         <td>{{{this.template}}}</td>
                                                         <td>{{this.sender}}</td>
@@ -70,7 +71,6 @@
                                                         <td>{{formatDate this.createdAt}}</td>
                                                         <td>
                                                              <a href="/admin/campaign/view/{{this._id}}" class="btn btn-success waves-effect waves-light"><i class="md md-visibility"></i></a>
-
                                                              <a href="/admin/campaign/analytics/{{this._id}}" class="btn btn-success waves-effect waves-light"><i class="ti-bar-chart"></i></a>
                                                         </td>
                                                     </tr>
@@ -88,7 +88,7 @@
                     </div> <!-- container -->
                 </div> <!-- content -->
 
-    <div class="right-card" style="top:70px">
+    <div id="email_camp" class="right-card" style="top:70px">
 		<div class="card-body">
 		<h4 class="text-white header-title m-t-0 m-b-20">Add New Campaign</h4>
 		<form id="form_data" method="POST" action="" onsubmit="return saveCampaign();"  >	
@@ -159,7 +159,7 @@
     });
 
 function showForm(){
-	$('.right-card').toggleClass('active');
+	$('#email_camp').toggleClass('active');
 }
 
 function saveCampaign(){
@@ -187,7 +187,7 @@ function saveCampaign(){
         l.stop();
         if(r.status=='success'){
             $('#outMsg').html('<div class="alert alert-success">'+r?.message+'</div>');
-            $('.right-card').toggleClass('active');
+            $('#email_camp').toggleClass('active');
             window.location.reload(true);
         }
         if(r.status=='error'){
@@ -196,7 +196,7 @@ function saveCampaign(){
     }).catch(error => {
         console.error('Error:', error);
         l.stop();
-            $('#outMsg').html('<div class="alert alert-danger">'+error?.message+'</div>');
+        $('#outMsg').html('<div class="alert alert-danger">'+error?.message+'</div>');
     });
     return false;
 }

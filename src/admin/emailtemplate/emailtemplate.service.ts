@@ -2,14 +2,14 @@ import { Injectable,ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
-import { EmailTemplate } from 'src/schemas/emailtemplate.schema';
+import { Template } from 'src/schemas/template.schema';
 import { Identity } from 'src/schemas/identity.schema';
 import { Contact } from 'src/schemas/contact.schema';
 
 @Injectable()
 export class EmailTemplateService {
   constructor(
-    @InjectModel(EmailTemplate.name) private model: Model<EmailTemplate>,
+    @InjectModel(Template.name) private model: Model<Template>,
     @InjectModel(Identity.name) private identityModel: Model<Identity>,
     @InjectModel(Contact.name) private contactModel: Model<Contact>,
   ){}
@@ -22,7 +22,7 @@ export class EmailTemplateService {
     }
   }
 
-  async getAllDatas(paginationQuery: PaginationQueryDto,sortBy: string, sortOrder: string): Promise<EmailTemplate[]>{
+  async getAllDatas(paginationQuery: PaginationQueryDto,sortBy: string, sortOrder: string): Promise<Template[]>{
     const { limit, search,page=1} = paginationQuery;
     const sortCriteria:any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
     const query = search ? { title: new RegExp(search, 'i') } : {};

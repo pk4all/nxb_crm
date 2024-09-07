@@ -65,8 +65,10 @@ async function bootstrap() {
         },
         selected: function (a: any, b: any) {
           return a==b?'selected':'';
+        },
+        status: function (a: any, b: any) {
+          return a?'Active':'Inactive';
         }
-
 
       }
     }),

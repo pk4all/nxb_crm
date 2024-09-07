@@ -16,7 +16,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <a href="/admin/email-template/add" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-left"><i class="md md-add"></i>Add Template</a>
+                                <a href="/admin/template/add" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-left"><i class="md md-add"></i>Add Template</a>
                                  {{!-- <a href="/admin/email-template/sync" ><i class="md md-sync"></i>SyncTemplate From SES</a> --}}
                                  {{!-- <button class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-right" onclick="showForm();">
                                     <i class="md md-add"></i>
@@ -70,9 +70,9 @@
                                                         </td>
                                                         <td>{{formatDate this.createdAt}}</td>
                                                         <td>
-                                                            <a href="/admin/email-template/edit/{{this._id}}" class="btn btn-success waves-effect waves-light"><i class="md md-edit"></i></a>
+                                                            <a href="/admin/template/edit/{{this._id}}" class="btn btn-success waves-effect waves-light"><i class="md md-edit"></i></a>
 
-                                                            <form action="/admin/email-template/delete/{{this._id}}" method="POST" style="display:inline;">
+                                                            <form action="/admin/template/delete/{{this._id}}" method="POST" style="display:inline;">
                                                                 <input type="hidden" name="_method" value="DELETE">
                                                                 <button class="btn btn-danger waves-effect waves-light" type="submit"><i class="md md-close"></i></button>
                                                             </form>

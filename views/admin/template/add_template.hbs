@@ -5,24 +5,23 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
-            <h4 class="page-title">Edit email template</h4>
+            <h4 class="page-title">Add Email Template</h4>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/admin/dashboard">CRM</a></li>
-                <li class="breadcrumb-item"><a href="/admin/email-templates">Email template</a></li>
-                <li class="breadcrumb-item active">Edit email template</li>
+                <li class="breadcrumb-item"><a href="/admin/dashboard">Adolaa</a></li>
+                <li class="breadcrumb-item"><a href="/admin/templates">Email Template</a></li>
+                <li class="breadcrumb-item active">Add Email Template</li>
             </ol>
         </div>
     </div>
 <div class="row">
     <div class="col-md-6">
-        <a href="/admin/email-templates" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-list"></i> All Templates</a>
-        <a href="/admin/email-template/add" class="btn btn-default btn-md waves-effect waves-light m-b-30"><i class="md md-add"></i> Add New</a>
+        <a href="/admin/templates" class="btn btn-default btn-md waves-effect waves-light m-b-30 pull-right"><i class="md md-list"></i> All Email Template</a>
     </div>
 </div>
         <div class="row justify-content-md-center">
         <div class="col-sm-12 col-md-9">
             <div class="card-box">
-                <h4 class="text-dark header-title m-t-0">Edit email template</h4>
+                <h4 class="text-dark header-title m-t-0">Add Email Template</h4>
                 {{#if flash.error}}
                     <div class="alert alert-danger">
                     {{{flash.error}}}
@@ -33,7 +32,8 @@
                     {{{flash.success}}}
                     </div>
                 {{/if}}
-                <form id="pageForm" action="/admin/email-template/update/{{id}}" method="post" onsubmit="return updateData()">
+                <form id="pageForm" action="/admin/template/create" method="post" onsubmit="return saveData();">
+
                     <div class="mb-3">
                         <label class="form-label">Template Type</label>
                         <select class="form-control" name="type" id="type">
@@ -42,30 +42,31 @@
                             <Option value="whatsapp-template">WhatsApp Template</Option>
                         </select>
                     </div>
-                   
+
                     <div class="mb-3">
                         <label class="form-label">Template Name</label>
-                        <input id="name" name="name" autocomplete="name" type="text" class="form-control" required="" value="{{data.templateName}}" readonly>
+                        <input id="name" name="name" autocomplete="name" type="text" class="form-control" required="" >
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Template Subject</label>
-                        <input id="subject" name="subject" autocomplete="subject" type="text" class="form-control" required="" value="{{data.templateSubject}}">
+                        <input id="subject" name="subject" autocomplete="subject" type="text" class="form-control" required="" >
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="">Template Content</label>
-                        <textarea id="content"  name="content" rows="5" class="form-control tinymce" aria-hidden="true">{{data.templateContent}}</textarea>
+                        <textarea id="content"  name="content" rows="5" class="form-control tinymce" aria-hidden="true"></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" for="">Status</label>
                         <div>
-                            {{#if data.status}}
                             <input id="status" type="checkbox" checked="" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
-                            {{else}}
-                            <input id="status" type="checkbox" data-plugin="switchery" data-color="#1bb99a" data-switchery="true" name="status">
-                            {{/if}}
-
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <code>{{synt}}</code>
+                    </div>
+                    <div class="mb-3">
+                        <hr style="border: 1px dashed #5a5858;" class="mt-0 mb-1">
                     </div>
                     <div class="mb-3">
                         <button id="saveBtn" type="submit" class=" waves-light btn btn-success btn-md waves-effect"><i class="md md-add"></i>Save</button>
@@ -80,7 +81,6 @@
 </div> <!-- container -->
 </div> <!-- content -->
 <script src="https://cdn.tiny.cloud/1/xe0yrjzxxk4vt0m1103e4dazp7y4qisilkaiji7iozziavt1/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-
 <script type="text/javascript">
     tinymce.init({
         selector: "textarea.tinymce",
@@ -92,21 +92,19 @@
         plugins: 'lists link table code',
         toolbar: 'undo redo | bold italic underline | forecolor backcolor | bullist numlist blockquote table | link unlink | alignleft aligncenter alignright | outdent indent | fontsizeselect | code',
      });
-function updateData(){
+
+function saveData(){
     const form = document.getElementById('pageForm');
-   var pageForm = $('#pageForm').serializeArray();
-    //var pageForm = new FormData(form);
+    var pageForm = new FormData(form);
     var l = Ladda.create(document.querySelector('#saveBtn'));
-    l.start();
-   
     const templateName = document.getElementById('name').value;
     const templateContent = document.getElementById('content').value;
     const templateSubject = document.getElementById('subject').value;
      const type = document.getElementById('type').value;
     const status = document.getElementById('status').value;
     const data = { templateName, templateSubject,status,type,templateContent };
-
-     fetch('/admin/email-template/update/{{id}}', {
+    l.start();
+    fetch('/admin/template/create', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -119,6 +117,7 @@ function updateData(){
         result = JSON.parse(result);
         if(result.status=='success'){
             $('#outMsg').html('<div class="alert alert-success">'+result?.message+'</div>');
+            form.reset();
         }
         if(result.status=='error'){
             $('#outMsg').html('<div class="alert alert-danger">'+result?.message+'</div>');
@@ -127,7 +126,6 @@ function updateData(){
       .catch(error => {
         l.stop();
         $('#outMsg').html('<div class="alert alert-danger">'+error?.message+'</div>');
-
       });
 
     return false;

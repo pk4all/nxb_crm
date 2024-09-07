@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model} from 'mongoose';
-import { EmailTemplate } from 'src/schemas/emailtemplate.schema';
+import { Template } from 'src/schemas/template.schema';
 import { Identity } from 'src/schemas/identity.schema';
 import { Contact } from 'src/schemas/contact.schema';
 import { Campaign } from 'src/schemas/campaign.schema';
@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 @Injectable()
 export class CampaignService {
     constructor(
-        @InjectModel(EmailTemplate.name) private templateModel: Model<EmailTemplate>,
+        @InjectModel(Template.name) private templateModel: Model<Template>,
         @InjectModel(Identity.name) private identityModel: Model<Identity>,
         @InjectModel(Contact.name) private contactModel: Model<Contact>,
         @InjectModel(Campaign.name) private campaignModel: Model<Campaign>,
@@ -137,36 +137,11 @@ export class CampaignService {
         }
     }
 
-    async delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    async sendEmailsWithRateLimit(destinations, batchSize = 1, delayTime = 1000) {
-        for (let i = 0; i < destinations.length; i += batchSize) {
-          const batch = destinations.slice(i, i + batchSize);
-         // await this.sendBatch(batch);
-          await this.delay(delayTime); // Delay between each batch
+    async updateCampaign(data,id){
+        try {
+            return  await this.campaignModel.findByIdAndUpdate(id,data);
+        } catch (error) {
+            throw new Error(error?.message||'Data not saved');
         }
-      }
-    
-    //   async sendBatch(batch) {
-    //     const params = {
-    //       Source: "your-email@example.com",
-    //       Template: templateName,
-    //       DefaultTemplateData: JSON.stringify({
-    //         firstName: "Customer",
-    //         lastName: "Surname",
-    //       }),
-    //       Destinations: batch,
-    //     };
-    
-    //     try {
-    //       const command = new SendBulkTemplatedEmailCommand(params);
-    //       const response = await client.send(command);
-    //       console.log("Batch sent successfully:", response);
-    //     } catch (error) {
-    //       console.error("Error sending batch:", error);
-    //     }
-    //   }
-    
+    }
 }
