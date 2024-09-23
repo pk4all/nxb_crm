@@ -53,7 +53,7 @@ export class EmailTemplateController {
   async identitie(@Req() req: Request) {
     try {
       const datas = await this.service.getIdentitiesData();
-      console.log(datas,'email data');
+     // console.log(datas,'email data');
       return {layout:'admin',datas};
     } catch (error) {
       req.session.flash = {
@@ -101,8 +101,8 @@ export class EmailTemplateController {
       const data = await this.service.create(reqdata);
       res.json({status:'success',message: 'Template successfully created.',data:data});
     } catch (error) {
-      console.log(error,'erore');
-        res.json({status:'error',message: error.message});
+      //console.log(error,'erore');
+      res.json({status:'error',message: error.message});
     }
   }
 
@@ -195,7 +195,7 @@ export class EmailTemplateController {
   async updateIdentitiyStatus(@Param('id') id: string,@Req() req: Request, @Res() res: Response){
       try {
           const data = await this.service.getIdentitiy(id);
-          console.log(data);
+         // console.log(data);
           if(data?.status){
             data.status = false;
           }else{
@@ -212,10 +212,10 @@ export class EmailTemplateController {
   async addIdentitiy(@Req() req: Request, @Res() res: Response){
       try {
         const data = req?.body||{};
-        console.log('send req data',req?.body);
+      //  console.log('send req data',req?.body);
         data.status = false;
         data.verificationStatus = 'Pending';
-        console.log(data,'send data',req?.body);
+      //  console.log(data,'send data',req?.body);
         const sender = await this.service.updateOrCreateIdentity(data,data.identityName);
         if(sender){
           await sendVerificationEmail(data.identityName);
@@ -260,7 +260,7 @@ export class EmailTemplateController {
       var sheetdata=XLSX.utils.sheet_to_json(worksheet, {raw:true})
       data.contacts=sheetdata;
       await this.service.createContact(data);
-      console.log(data,'post data');
+     // console.log(data,'post data');
       res.json({status:'success',message: 'Contacts saved successfully.'});
     } catch (error) {
       res.json({status:'error',message: error.message});

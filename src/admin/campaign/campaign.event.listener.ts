@@ -8,6 +8,7 @@ import { CampaignResponse } from 'src/schemas/campaign.response.schema';
 
 const mongoose = require('mongoose');
 import {getSendingStatistics,sendBulkTemplatedEmail} from 'src/common/utils/ses.utility';
+
 const chunk = (arr, size) =>Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
       arr.slice(i * size, i * size + size)
     );
@@ -23,6 +24,8 @@ export class CampaignEventListener {
         const campaignData = await this.getCampaign(event.campaignId);
         const getSesLimit = await getSendingStatistics();
         const maxSendRate = getSesLimit.MaxSendRate;
+        // console.log(campaignData,maxSendRate,event.campaignId);
+        // return;
         const contactsList = campaignData.contacts.contacts.map(elm=>{
             let d = elm;
             return {
@@ -85,9 +88,9 @@ export class CampaignEventListener {
                     as: "templates"
                     },
                 },
-                {
-                    $unwind: '$templates'
-                },
+                // {
+                //     $unwind: '$templates'
+                // },
                 {
                     $project: {
                     name: 1,

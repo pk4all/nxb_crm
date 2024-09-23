@@ -43,7 +43,6 @@ export class WebController {
         } catch (error) {
             return {layout:'web',data:[],error:error.message};
         }
-        
     }
     @Get('/all-fields/:id?')
     async allFields(@Param('id') id: string,@Res() res: Response){
@@ -52,7 +51,7 @@ export class WebController {
             res.json({outputJson:f});
         } catch (error) {
             res.json({error:error.message});
-        } 
+        }
     }
     @Post('/forms/save-response/:id')
     async saveResponse(@Param('id') id: string,@Res() res: Response,@Req() req: Request){

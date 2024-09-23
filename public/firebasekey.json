@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "crafttatva-com",
+    "private_key_id": "221888098091fc11f65126b7fb597aa9943155de",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCrZtE1KTuqMtSI\nQi3wA4DAJgf2THQTnWLXnN7NHJwBjOEgS9Yc1HWTOqzNMRsAomiU1wTBAH73v/BC\n7sI5JEAhlnruTeae5tXqVqQvM9g8u+mFKAYWjzbtNZQSUEBh2oH7p+7s2449k6FP\nJOUBH0fjCQiSn5IhTcDKgvQDvXpOGA5z0sBzUUyel8b19s4bToHTOTt7Ux6tNz1v\n7iO02tA+4amOsvqRWVSBFakzGEP3+k3hUUASi37J3xbBYHdJycVtym3bQ9Oz4Bw9\nAadjdiK2WKhH1L2gcNe8ivmqIVEB4YlfSGGTtI+jD1fTe7iZw6oMsvhwUvM9rBwM\n/Fj0X6HXAgMBAAECggEAA/lYzWo802flTJl4NjHmmM3o7ll8cX37LjOZaNkKdvC8\nwYJwnu+AIF9CZWmHjj61vQm1NwJbb0QYfnzJrQh9oim6hO7yc2m3uPy0RtHlaBcV\nRXyVk41TgTF2UuxgacRmsh6FKCG5DQ1wtoSM+Lcwc/+gHsIrYbFLUIazwKhyfv//\nDNh2EVTgZUqHBpjPlNP8wUth4Pp/JgpQR0qBBXj6QpaKdy512eBsDRxNug/GxAhQ\nlwZXjf9yqRbVaRniYPDV3S4wNABy/trIVAat60Yo0RcFHUI1+q2upYiIWUJ0LB1F\nlaL/U5ogSm2NadIXkNb7eJeZE91YyEYrlwIiHpkeTQKBgQDg4w8y67o55u9iVNvS\ntN3IIR+26PdX2v0E4QLr3d3p9eV8xnO0mN244mRlzDGjFQlrxoAEm7ranKtxRiX1\n1xRsZZB7QWIt+F4npKHyXayaUIeqA4Z5JrWQJXLpsFyJaglRZvT8nU4dPGYKNT3M\nqFN3K2dN97NB/1+tG++qw3LrSwKBgQDDHXCXweRzJFaLW6Lpmjw7H1VhzgUoiAUY\n3fiPMuRY1onwWI9LThtrg60pu2QsKhvS+AnTtagDBcd8DBGRvEvqFnQtB8ljIhAe\naNy51QAFBz6NglWj76NNHRY6op2JPtBvagiY1iUYmA0m+WMBb3NY8XUqsCZHwbfc\nKyLl1WbgJQKBgF0G0DS6OnDVTNUaUUyaMNwmh538RMT8+4lXIwQ65R9w7pts5FQi\noCVo0SsjCq1xeFIy7KX7XZItGOZkpDNL41Drupah92EYyqoPekZt5YZ4JYZ4qtnW\n32hfdWeh4sWdLXmU42bUE4oYgAVc/NF6F/zF4ZfpDSgR4ZwUYFH9Q759AoGBAImi\nfMgweAxY98u6SoNqz04NXldt0umyeZX/DtVE2xtny0oFzp8aa/E9o6sqixE0awg4\n/AWhwPDQ5NU2VjZtk0d/q1gQhBkv8BrjccCM5kSlxZRg+jR4WMOO3x1hlKs56iKN\ns57MgMKGj9CMXzCmA8IcIcCJHZfEqQPgUe+6x6UZAoGBALoVoB/DGY0ZKRxVULRZ\nsx2sL6Dc615+rMa6HXZ+/FbTNjfbOKS+REc5oW9+591LyaTrMzsVs9ub/jWXRWPF\nVLPC7fHLrON1fyYU5FFaLv42/KEVsHr9t5h7WGytqNxiH9RPdpTeLwJs5xAK126u\nDRkmuQ9HE9fhSNoYZ9BJqrlt\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-yb1y7@crafttatva-com.iam.gserviceaccount.com",
+    "client_id": "109150645460703111054",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-yb1y7%40crafttatva-com.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+}

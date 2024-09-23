@@ -111,9 +111,9 @@ export class CampaignService {
                       as: "templates"
                     },
                   },
-                  {
-                    $unwind: '$templates'
-                  },
+                //   {
+                //     $unwind: '$templates'
+                //   },
                   {
                     $project: {
                       name: 1,
@@ -131,7 +131,9 @@ export class CampaignService {
                   }
 
               ]).exec();
+            //   console.log(campaign,'camp');
              return campaign[0];
+            
         } catch (error) {
             throw new Error(error?.message||'Data not Found');
         }

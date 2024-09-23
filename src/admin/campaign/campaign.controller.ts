@@ -6,6 +6,7 @@ import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CampaignSendEvent } from 'src/common/events/campaign-send.event';
 import { sendWelcomeTemplateMessage } from 'src/common/utils/whatsapp.utility';
+const { ObjectId } = require('mongodb');
 
 @UseGuards(SessionGuard)
 @Controller('admin')
@@ -34,17 +35,20 @@ export class CampaignController {
   async view(@Param('id') id: string,@Req() req: Request, @Res() res: Response) {
     try {
       const campaign = await this.campaignService.getCampaign(id);
+      // console.log(campaign);
       return {layout:'admin',campaign};
     } catch (error) {
       return {layout:'admin'};
     }
-    
   }
 
   @Post('/campaign/create')
   async campaignCreate(@Req() req: Request, @Res() res: Response){
     var reqdata = req?.body||{};
     try {
+      if(reqdata?.contact){
+        reqdata.contact = new ObjectId(reqdata.contact);
+      }
       const data = await this.campaignService.createCampaign(reqdata);
       res.json({status:'success',message: 'Campaign successfully created.',data:data});
     } catch (error) {
