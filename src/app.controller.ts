@@ -20,7 +20,7 @@ export class AppController {
     // QRCode.toDataURL('I am a pony!', function (err, url) {
     //   console.log(url)
     // });
-    QRCode.toString('I am a pony!',{type:'terminal'}, function (err, url) {
+    QRCode.toString('http://nextbuying.in',{type:'terminal'}, function (err, url) {
       console.log(url)
     });
     //const q =  await QRCode.toString('http://nextbuying.in');

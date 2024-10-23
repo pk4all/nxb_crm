@@ -49,6 +49,7 @@ export async function updateTemplate(data){
         };
         const command = new UpdateTemplateCommand(input);
         const response = await client.send(command);
+        //console.log(response,'response update tmpl');
         return response;
     } catch (error) {
         console.error(error,'ses error');

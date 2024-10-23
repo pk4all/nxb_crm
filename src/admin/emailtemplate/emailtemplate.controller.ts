@@ -110,12 +110,10 @@ export class EmailTemplateController {
   async update(@Body() body:any ,@Param('id') id: string,@Req() req: Request, @Res() res: Response) {
     try {
       var reqdata = req?.body||{};
-      reqdata.templateSlug= reqdata.templateName
-       .toLowerCase()
-       .trim()
-       .replace(/\s+/g, '-')
-       .replace(/[^\w\-]+/g, '')
-       .replace(/\-\-+/g, '-');
+      var getTmpl = await this.service.getData(id);
+      reqdata.templateSlug= getTmpl?.templateSlug;
+      //return reqdata;
+     // console.log(reqdata,'reqdata');
       if(reqdata.type=='email-template'){
         const ses = await updateTemplate(reqdata);
         reqdata.resourceId = ses.$metadata.requestId;
